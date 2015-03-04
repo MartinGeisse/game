@@ -9,6 +9,9 @@ eclipse {
 
 repositories {
 	mavenCentral()
+	maven {
+		url "http://nifty-gui.sourceforge.net/nifty-maven-repo"
+	}
 }
 
 dependencies {
@@ -17,5 +20,11 @@ dependencies {
 	compile 'commons-io:commons-io:2.4'
 	compile 'joda-time:joda-time:2.5'
 	compile 'com.google.code.gson:gson:2.3'
+
+	// lwjgl
 	compile 'org.lwjgl.lwjgl:lwjgl:2.9.3'
+	compile 'org.lwjgl.lwjgl:lwjgl_util:2.9.3'
+	compile 'slick:slick:20121001-264'
+	compile 'com.googlecode.soundlibs:jorbis:0.0.17-2'
+
 }
