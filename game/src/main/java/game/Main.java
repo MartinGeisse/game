@@ -6,9 +6,9 @@
 
 package game;
 
+import game.engine.frame.FrameLoop;
 import name.martingeisse.pacman.application.ApplicationFrameHandlerManager;
 import name.martingeisse.pacman.application.static_resources.StaticResources;
-import name.martingeisse.stackd.client.frame.FrameLoop;
 import name.martingeisse.stackd.client.util.LwjglNativeLibraryHelper;
 
 import org.apache.log4j.Logger;
@@ -60,11 +60,6 @@ public class Main {
 				}
 			}
 			logger.trace("command line options parsed");
-
-			// prepare native libraries
-			logger.trace("preparing native libraries...");
-			LwjglNativeLibraryHelper.prepareNativeLibraries();
-			logger.trace("native libraries prepared");
 
 			// configure the display
 			logger.trace("finding optimal display mode...");
