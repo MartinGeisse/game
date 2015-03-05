@@ -9,8 +9,6 @@ package game.engine.frame;
 import static org.lwjgl.opengl.GL11.glFlush;
 import game.engine.frame.handlers.HandlerList;
 import game.engine.frame.handlers.SwappableHandler;
-import name.martingeisse.stackd.client.glworker.GlWorkUnit;
-import name.martingeisse.stackd.client.glworker.GlWorkerLoop;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -25,23 +23,6 @@ import org.lwjgl.opengl.Display;
  * single root handler of type {@link SwappableHandler} that allows
  * to put an arbitrary application handler -- typically itself
  * a {@link HandlerList} -- in place.
- * 
- * This class can optionally store a GL worker loop. If this is the case, then
- * the following things happen:
- * 
- * - the worker loop gets passed to all frame handlers when drawing, so the
- *   frame handlers can pass drawing WUs to the worker loop
- * 
- * - the frame loop's call to {@link Display#update()} and to
- *   {@link Display#processMessages()} is passed to the worker
- *   loop instead of executed directly
- *   
- * - if the worker loop is overloaded, whole drawing phases are skipped, including
- *   calls to {@link IFrameHandler#onBeforeDraw(GlWorkerLoop)} and
- *   {@link IFrameHandler#onAfterDraw(GlWorkerLoop)}.
- *   
- * - after drawing, this class adds a frame boundary marker to the GL worker loop
- * 
  */
 public final class FrameLoop {
 
@@ -51,24 +32,10 @@ public final class FrameLoop {
 	private final SwappableHandler rootHandler;
 	
 	/**
-	 * the glWorkerLoop
-	 */
-	private final GlWorkerLoop glWorkerLoop;
-	
-	/**
 	 * Constructor.
 	 */
 	public FrameLoop() {
-		this(null);
-	}
-	
-	/**
-	 * Constructor.
-	 * @param glWorkerLoop optional GL worker loop as explained in the class comment
-	 */
-	public FrameLoop(GlWorkerLoop glWorkerLoop) {
 		this.rootHandler = new SwappableHandler();
-		this.glWorkerLoop = glWorkerLoop;
 	}
 	
 	/**
@@ -87,27 +54,12 @@ public final class FrameLoop {
 		
 		// draw all handlers
 		try {
-			if (glWorkerLoop == null || !glWorkerLoop.isOverloaded()) {
-				rootHandler.onBeforeDraw(glWorkerLoop);
-				rootHandler.draw(glWorkerLoop);
-				rootHandler.onAfterDraw(glWorkerLoop);
-				if (glWorkerLoop != null) {
-					// TODO don't create a new object every frame
-					glWorkerLoop.getQueue().add(new GlWorkUnit() {
-						@Override
-						public void execute() {
-							glFlush();
-							Display.update();
-							Display.processMessages();
-						}
-					});
-					glWorkerLoop.scheduleFrameBoundary();
-				} else {
-					glFlush();
-					Display.update();
-					Display.processMessages();
-				}
-			}
+			rootHandler.onBeforeDraw();
+			rootHandler.draw();
+			rootHandler.onAfterDraw();
+			glFlush();
+			Display.update();
+			Display.processMessages();
 		} catch (Exception e) {
 			throw new RuntimeException("unexpected exception while drawing", e);
 		}

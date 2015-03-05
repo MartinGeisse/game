@@ -6,7 +6,6 @@
 
 package game.engine.frame;
 
-import name.martingeisse.stackd.client.glworker.GlWorkerLoop;
 
 /**
  * Base implementation of {@link IFrameHandler}.
@@ -35,24 +34,24 @@ public abstract class AbstractFrameHandler implements IFrameHandler {
 	}
 
 	/* (non-Javadoc)
-	 * @see name.martingeisse.stackd.client.frame.IFrameHandler#onBeforeDraw(name.martingeisse.glworker.GlWorkerLoop)
+	 * @see game.engine.frame.IFrameHandler#onBeforeDraw()
 	 */
 	@Override
-	public void onBeforeDraw(GlWorkerLoop glWorkerLoop) {
+	public void onBeforeDraw() {
 	}
 	
 	/* (non-Javadoc)
-	 * @see name.martingeisse.stackd.client.frame.IFrameHandler#draw(name.martingeisse.glworker.GlWorkerLoop)
+	 * @see game.engine.frame.IFrameHandler#draw()
 	 */
 	@Override
-	public void draw(GlWorkerLoop glWorkerLoop) {
+	public void draw() {
 	}
 	
 	/* (non-Javadoc)
-	 * @see name.martingeisse.stackd.client.frame.IFrameHandler#onAfterDraw(name.martingeisse.glworker.GlWorkerLoop)
+	 * @see game.engine.frame.IFrameHandler#onAfterDraw()
 	 */
 	@Override
-	public void onAfterDraw(GlWorkerLoop glWorkerLoop) {
+	public void onAfterDraw() {
 	}
 
 }

@@ -10,7 +10,7 @@ package game.engine.frame;
  * Returns the duration of the previous frame to make game logic adapt
  * to a varying frame rate.
  * 
- * The sensor is capped to a maximum of 1/2 second to avoid "exploding"
+ * The sensor is capped to a maximum of 1 second to avoid "exploding"
  * the game logic.
  */
 public final class FrameDurationSensor {

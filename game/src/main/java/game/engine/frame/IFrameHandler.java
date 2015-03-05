@@ -6,8 +6,6 @@
 
 package game.engine.frame;
 
-import name.martingeisse.stackd.client.glworker.GlWorkerLoop;
-
 /**
  * Represents an action that gets repeated every frame.
  * 
@@ -38,27 +36,21 @@ public interface IFrameHandler {
 	public void onAfterHandleStep();
 	
 	/**
-	 * Called just before calling {@link #draw(GlWorkerLoop)} on all handlers.
+	 * Called just before calling {@link #draw()} on all handlers.
 	 * This method should prepare data that this or other handlers might
 	 * require in their draw() method.
-	 * 
-	 * @param glWorkerLoop the OpenGL worker loop
 	 */
-	public void onBeforeDraw(GlWorkerLoop glWorkerLoop);
+	public void onBeforeDraw();
 	
 	/**
 	 * Draws the screen contents using OpenGL.
-	 * 
-	 * @param glWorkerLoop the OpenGL worker loop
 	 */
-	public void draw(GlWorkerLoop glWorkerLoop);
+	public void draw();
 
 	/**
-	 * Called just after calling {@link #draw(GlWorkerLoop)} on all handlers.
+	 * Called just after calling {@link #draw()} on all handlers.
 	 * This method should discard unused data.
-	 * 
-	 * @param glWorkerLoop the OpenGL worker loop
 	 */
-	public void onAfterDraw(GlWorkerLoop glWorkerLoop);
+	public void onAfterDraw();
 	
 }
