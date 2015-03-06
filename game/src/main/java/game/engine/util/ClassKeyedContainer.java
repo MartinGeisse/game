@@ -55,7 +55,7 @@ public class ClassKeyedContainer<B> implements Serializable {
 	 * @param value the value to set
 	 * @return the previously stored value for that key
 	 */
-	public <T extends B> T set(Class<T> key, T value) {
+	public <T extends B> T set(Class<? extends T> key, T value) {
 		if (key == null) {
 			throw new IllegalArgumentException("key is null");
 		}
