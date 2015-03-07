@@ -7,6 +7,7 @@ package game.core.gfx;
 import org.lwjgl.opengl.GL11;
 
 import game.core.AbstractBehavior;
+import game.core.GameObject;
 import game.engine.gfx.RgbaColor;
 
 /**
@@ -33,12 +34,12 @@ public final class DrawRectangleBehavior extends AbstractBehavior {
 	public DrawRectangleBehavior(RgbaColor color) {
 		this.color = color;
 	}
-
+	
 	/* (non-Javadoc)
-	 * @see game.core.AbstractBehavior#draw()
+	 * @see game.core.Behavior#draw(game.core.GameObject)
 	 */
 	@Override
-	public void draw() {
+	public void draw(GameObject target) {
 		color.glColor();
 		GL11.glBegin(GL11.GL_QUADS);
 		GL11.glVertex2i(10 << 8, 10 << 8);

@@ -1,0 +1,41 @@
+
+Idee: Behaviors erledigen aktuell zwei Aufgaben:
+- hooks für hookpoints
+- sind abrufbar um zentrale eigenschaften zu setzen
+
+Idee: zentrale eigenschaften über features abbilden:
+- Behaviors sind nur noch hooks für hookpoints
+- Behaviors können nicht mehr abgerufen werden
+	(gut? für quick&dirty immer noch brauchbar)
+	brauchen auch nicht mehr ihre Klasse als Key zu benutzen
+- Features sind abrufbar
+	Benutzen zentral definierten FeatureKey als key in der Map
+	Vergleich per Identität des Key-Objekts
+- Features haben keine Callbacks
+
+Wahrscheinliches Problem:
+- Vieles, was man umsetzen will, ist teilweise Behavior, teilweise Feature
+- braucht dann immer zwei Klassen --> umständlich
+- Idee eines Plugin-Systems ist eigentlich, dass man ein Objekt einfügt, und
+	der Rest geht automatisch.
+	
+Was war das ursprüngliche Problem?
+- Es soll für ein Game-Objekt ein TextureResolver installiert werden,
+	weil es keine "passende" Stelle gibt, um eine Textur anderweitig
+	anzugeben (in prepareOpenglState() ist unpassend, weil andere
+	Behaviors diese wirder überladen könnten, bevor sie benutzt werden
+	soll). Also soll die Textur nicht vom TextureResolver in OpenGL
+	geladen werden, sondern nur per Getter returned, und ein
+	DrawTexturedRectangleBehavior ruft diese ab und zeichnet sie.
+	-
+	Dieser kann nicht einfach ein Behavior sein, weil es verschiedene
+	Implementierungen geben soll, die aber alle den gleichen Key in
+	der Behavior-Map nehmen sollen.
+	-
+	Ein Quick&Dirty fix wäre, den Key als Parameter anzugeben, und der
+	Default ist die Klasse des übergebenen Behaviors.
+	Frage: Ist das eine gute Lösung, oder wirklich nur Q&D?
+	-
+	Eine alternative Punktlösung wäre es, das DrawTexturedRectangle
+	als abstrakte Klasse zu bauen (oder mit übergebenem TextureResolver
+	--> favor composition over inheritance).

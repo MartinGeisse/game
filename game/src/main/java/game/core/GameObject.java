@@ -100,10 +100,10 @@ public class GameObject {
 	public void draw() {
 		GL11.glPushMatrix();
 		for (Behavior behavior : behaviors.getValues()) {
-			behavior.prepareRenderState();
+			behavior.prepareRenderState(this);
 		}
 		for (Behavior behavior : behaviors.getValues()) {
-			behavior.draw();
+			behavior.draw(this);
 		}
 		GL11.glPopMatrix();
 	}
@@ -113,7 +113,7 @@ public class GameObject {
 	 */
 	public void handleStep() {
 		for (Behavior behavior : behaviors.getValues()) {
-			behavior.handleStep();
+			behavior.handleStep(this);
 		}
 	}
 

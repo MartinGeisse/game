@@ -44,7 +44,7 @@ public final class Resources {
 	/**
 	 * 
 	 */
-	private ResourceManager enforceHasResourceManager() {
+	private static ResourceManager enforceHasResourceManager() {
 		if (resourceManager == null) {
 			throw new RuntimeException("no resource manager");
 		}
@@ -57,7 +57,7 @@ public final class Resources {
 	 * @param name the name of the texture
 	 * @return the texture
 	 */
-	public Texture getTexture(final String name) {
+	public static Texture getTexture(final String name) {
 		 return enforceHasResourceManager().getTexture(name);
 	}
 	
@@ -67,7 +67,7 @@ public final class Resources {
 	 * @param name the name of the font
 	 * @return the font
 	 */
-	public Font getFont(final String name) {
+	public static Font getFont(final String name) {
 		return enforceHasResourceManager().getFont(name);
 	}
 
@@ -77,7 +77,7 @@ public final class Resources {
 	 * @param name the name of the sound
 	 * @return the sound
 	 */
-	public Audio getSound(final String name) {
+	public static Audio getSound(final String name) {
 		return enforceHasResourceManager().getSound(name);
 	}
 

@@ -2,11 +2,12 @@
  * Copyright (c) 2013 Shopgate GmbH
  */
 
-package game.core.gfx;
+package game.core.movement;
 
 import org.lwjgl.opengl.GL11;
 
 import game.core.AbstractBehavior;
+import game.core.GameObject;
 import game.core.geometry.MutablePosition;
 import game.core.geometry.ReadablePosition;
 
@@ -44,10 +45,10 @@ public final class PositionBehavior extends AbstractBehavior {
 	}
 	
 	/* (non-Javadoc)
-	 * @see game.core.AbstractBehavior#prepareRenderState()
+	 * @see game.core.AbstractBehavior#prepareRenderState(game.core.GameObject)
 	 */
 	@Override
-	public void prepareRenderState() {
+	public void prepareRenderState(GameObject target) {
 		GL11.glTranslatef(mutablePosition.getX(), mutablePosition.getY(), 0.0f);
 	}
 	
