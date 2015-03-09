@@ -4,13 +4,13 @@
 
 package game.core.movement;
 
-import game.core.AbstractBehavior;
+import game.core.AbstractFeature;
 import game.core.geometry.LeftRight;
 
 /**
- * This behavior is able to store a left/right orientation.
+ * This feature is able to store a left/right orientation.
  */
-public final class LeftRightOrientationBehavior extends AbstractBehavior {
+public final class LeftRightOrientationFeature extends AbstractFeature {
 
 	/**
 	 * the orientation

@@ -72,7 +72,7 @@ public final class CursorMoveBehavior extends AbstractBehavior {
 	 */
 	private boolean handleKey(GameObject target, int key, int dx, int dy) {
 		if (Keyboard.isKeyDown(key)) {
-			MutablePosition mutablePosition = target.getBehavior(PositionBehavior.class).getMutablePosition();
+			MutablePosition mutablePosition = target.getFeature(PositionFeature.class).getMutablePosition();
 			mutablePosition.setX(mutablePosition.getX() + dx);
 			mutablePosition.setY(mutablePosition.getY() + dy);
 			return true;
@@ -85,7 +85,7 @@ public final class CursorMoveBehavior extends AbstractBehavior {
 	 * 
 	 */
 	private void handleLeftRight(GameObject target, LeftRight orientation) {
-		LeftRightOrientationBehavior behavior = target.getBehavior(LeftRightOrientationBehavior.class);
+		LeftRightOrientationFeature behavior = target.getFeature(LeftRightOrientationFeature.class);
 		if (behavior != null) {
 			behavior.setOrientation(orientation);
 		}

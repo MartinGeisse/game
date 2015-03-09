@@ -14,8 +14,9 @@ import game.core.gfx.LeftRightSpriteProvider;
 import game.core.gfx.Sprite;
 import game.core.gfx.SpriteProvider;
 import game.core.movement.AbstractJumpAndRunBehavior;
-import game.core.movement.LeftRightOrientationBehavior;
+import game.core.movement.LeftRightOrientationFeature;
 import game.core.movement.PositionBehavior;
+import game.core.movement.PositionFeature;
 import game.engine.resource.Resources;
 import game.engine.system.EngineLauncher;
 
@@ -39,8 +40,9 @@ public class Main {
 		SpriteProvider playerSpriteProvider = new LeftRightSpriteProvider(playerLeft, playerRight);
 		
 		GameObject testObject = new GameObject();
-		testObject.attachBehavior(new PositionBehavior(new Position(100 << 8, 100 << 8)));
-		testObject.attachBehavior(new LeftRightOrientationBehavior());
+		testObject.attachBehavior(new PositionBehavior());
+		testObject.getFeature(PositionFeature.class).getMutablePosition().copyFrom(new Position(100 << 8, 100 << 8));
+		testObject.attachFeature(new LeftRightOrientationFeature());
 		testObject.attachBehavior(new DrawSpriteBehavior(playerSpriteProvider));
 		// testObject.attachBehavior(new CursorMoveBehavior(1500));
 		testObject.attachBehavior(new AbstractJumpAndRunBehavior() {
@@ -58,7 +60,7 @@ public class Main {
 			 */
 			@Override
 			protected int adjustHorizontalMovement(GameObject target, int dx) {
-				MutablePosition mutablePosition = target.getBehavior(PositionBehavior.class).getMutablePosition();
+				MutablePosition mutablePosition = target.getFeature(PositionFeature.class).getMutablePosition();
 				dx = Math.max(dx, (100 << 8) - mutablePosition.getX());
 				dx = Math.min(dx, (700 << 8) - mutablePosition.getX());
 				return dx;
@@ -69,7 +71,7 @@ public class Main {
 			 */
 			@Override
 			protected int adjustVerticalMovement(GameObject target, int dy) {
-				MutablePosition mutablePosition = target.getBehavior(PositionBehavior.class).getMutablePosition();
+				MutablePosition mutablePosition = target.getFeature(PositionFeature.class).getMutablePosition();
 				return Math.min(dy, (500 << 8) - mutablePosition.getY());
 			}
 			
