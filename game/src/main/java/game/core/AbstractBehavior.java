@@ -10,17 +10,17 @@ package game.core;
 public abstract class AbstractBehavior implements Behavior {
 
 	/* (non-Javadoc)
-	 * @see game.core.Behavior#onBehaviorAttached(game.core.GameObject)
+	 * @see game.core.Behavior#onAttach(game.core.GameObject)
 	 */
 	@Override
-	public void onBehaviorAttached(GameObject target) {
+	public void onAttach(GameObject target) {
 	}
 
 	/* (non-Javadoc)
-	 * @see game.core.Behavior#onBehaviorDetached(game.core.GameObject)
+	 * @see game.core.Behavior#onDetach(game.core.GameObject)
 	 */
 	@Override
-	public void onBehaviorDetached(GameObject target) {
+	public void onDetach(GameObject target) {
 	}
 
 	/* (non-Javadoc)

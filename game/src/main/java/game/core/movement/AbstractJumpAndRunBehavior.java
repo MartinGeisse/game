@@ -58,7 +58,7 @@ public abstract class AbstractJumpAndRunBehavior extends AbstractBehavior {
 		// vertical movement
 		verticalSpeed += getGravity(target);
 		int dy = adjustVerticalMovement(target, verticalSpeed);
-		MutablePosition mutablePosition = target.getFeature(PositionFeature.class).getMutablePosition();
+		MutablePosition mutablePosition = target.getBehavior(PositionBehavior.class).getMutablePosition();
 		mutablePosition.setY(mutablePosition.getY() + dy);
 		if (dy != verticalSpeed) {
 			verticalSpeed = 0;
@@ -76,9 +76,9 @@ public abstract class AbstractJumpAndRunBehavior extends AbstractBehavior {
 	private void handleHorizontalMovementKey(GameObject target, int key, int dx, LeftRight leftRight) {
 		if (Keyboard.isKeyDown(key)) {
 			dx = adjustHorizontalMovement(target, dx);
-			MutablePosition mutablePosition = target.getFeature(PositionFeature.class).getMutablePosition();
+			MutablePosition mutablePosition = target.getBehavior(PositionBehavior.class).getMutablePosition();
 			mutablePosition.setX(mutablePosition.getX() + dx);
-			LeftRightOrientationFeature leftRightOrientationBehavior = target.getFeature(LeftRightOrientationFeature.class);
+			LeftRightOrientationBehavior leftRightOrientationBehavior = target.getBehavior(LeftRightOrientationBehavior.class);
 			if (leftRightOrientationBehavior != null) {
 				leftRightOrientationBehavior.setOrientation(leftRight);
 			}

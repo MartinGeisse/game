@@ -14,14 +14,14 @@ public interface Behavior {
 	 * 
 	 * @param target the game object from which this behavior got detached
 	 */
-	public void onBehaviorAttached(GameObject target);
+	public void onAttach(GameObject target);
 
 	/**
 	 * Called after this behavior gets detached from a game object.
 	 * 
 	 * @param target the game object from which this behavior got detached
 	 */
-	public void onBehaviorDetached(GameObject target);
+	public void onDetach(GameObject target);
 
 	/**
 	 * Establishes the general render state. This includes, first and foremost, the

@@ -4,33 +4,52 @@
 
 package game.core.movement;
 
+import org.lwjgl.opengl.GL11;
+
 import game.core.AbstractBehavior;
 import game.core.GameObject;
 import game.core.geometry.MutablePosition;
-
-import org.lwjgl.opengl.GL11;
+import game.core.geometry.ReadablePosition;
 
 /**
- * This behavior adds a {@link PositionFeature} to an object.
+ * Objects with this behavior have a position in the world and can be moved.
  */
 public final class PositionBehavior extends AbstractBehavior {
 
-	/* (non-Javadoc)
-	 * @see game.core.AbstractBehavior#onBehaviorAttached(game.core.GameObject)
+	/**
+	 * the mutablePosition
 	 */
-	@Override
-	public void onBehaviorAttached(GameObject target) {
-		target.attachFeature(new PositionFeature());
-	}
+	private final MutablePosition mutablePosition = new MutablePosition(0, 0);
 
+	/**
+	 * Constructor.
+	 */
+	public PositionBehavior() {
+	}
+	
+	/**
+	 * Constructor.
+	 * @param initialPosition the initial position
+	 */
+	public PositionBehavior(ReadablePosition initialPosition) {
+		mutablePosition.copyFrom(initialPosition);
+	}
+	
+	
+	/**
+	 * Getter method for the mutablePosition.
+	 * @return the mutablePosition
+	 */
+	public MutablePosition getMutablePosition() {
+		return mutablePosition;
+	}
+	
 	/* (non-Javadoc)
 	 * @see game.core.AbstractBehavior#prepareRenderState(game.core.GameObject)
 	 */
 	@Override
 	public void prepareRenderState(GameObject target) {
-		PositionFeature feature = target.getFeature(PositionFeature.class);
-		MutablePosition mutablePosition = feature.getMutablePosition();
 		GL11.glTranslatef(mutablePosition.getX(), mutablePosition.getY(), 0.0f);
 	}
-
+	
 }

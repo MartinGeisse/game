@@ -6,11 +6,11 @@ package game.core.gfx;
 
 import game.core.GameObject;
 import game.core.geometry.LeftRight;
-import game.core.movement.LeftRightOrientationFeature;
+import game.core.movement.LeftRightOrientationBehavior;
 
 /**
  * A sprite provider that delegates to either one of two providers
- * based on the {@link LeftRightOrientationFeature} of the game
+ * based on the {@link LeftRightOrientationBehavior} of the game
  * object.
  */
 public final class LeftRightSpriteProvider implements SpriteProvider {
@@ -56,10 +56,10 @@ public final class LeftRightSpriteProvider implements SpriteProvider {
 	 */
 	@Override
 	public Sprite provideSprite(GameObject object) {
-		LeftRightOrientationFeature feature = object.getFeature(LeftRightOrientationFeature.class);
-		if (feature == null || feature.getOrientation() == null) {
+		LeftRightOrientationBehavior behavior = object.getBehavior(LeftRightOrientationBehavior.class);
+		if (behavior == null || behavior.getOrientation() == null) {
 			return null;
-		} else if (feature.getOrientation() == LeftRight.LEFT) {
+		} else if (behavior.getOrientation() == LeftRight.LEFT) {
 			return leftProvider.provideSprite(object);
 		} else {
 			return rightProvider.provideSprite(object);
