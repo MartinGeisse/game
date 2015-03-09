@@ -62,6 +62,7 @@ public abstract class AbstractJumpAndRunBehavior extends AbstractBehavior {
 		mutablePosition.setY(mutablePosition.getY() + dy);
 		if (dy != verticalSpeed) {
 			verticalSpeed = 0;
+			// TODO only if blocked by floor, not ceiling
 			if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
 				verticalSpeed = -5000;
 			}
