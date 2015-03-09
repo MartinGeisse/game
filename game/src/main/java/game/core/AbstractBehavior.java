@@ -10,6 +10,14 @@ package game.core;
 public abstract class AbstractBehavior implements Behavior {
 
 	/* (non-Javadoc)
+	 * @see game.core.Behavior#getId()
+	 */
+	@Override
+	public String getId() {
+		return getClass().getName();
+	}
+
+	/* (non-Javadoc)
 	 * @see game.core.Behavior#onAttach(game.core.GameObject)
 	 */
 	@Override

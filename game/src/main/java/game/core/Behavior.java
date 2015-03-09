@@ -6,9 +6,20 @@ package game.core;
 
 /**
  * This interface represents a "building block" for a game object.
+ * 
+ * Each behavior has an ID that is used to obtain it from a game
+ * object. Two different behaviors on the same game object cannot
+ * have the same ID.
  */
 public interface Behavior {
 
+	/**
+	 * Getter method for the ID of this behavior.
+	 * 
+	 * @return the ID
+	 */
+	public String getId();
+	
 	/**
 	 * Called after this behavior gets attached to a game object.
 	 * 

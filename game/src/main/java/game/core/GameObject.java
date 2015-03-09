@@ -4,9 +4,10 @@
 
 package game.core;
 
-import org.lwjgl.opengl.GL11;
+import java.util.HashMap;
+import java.util.Map;
 
-import game.engine.util.ClassKeyedContainer;
+import org.lwjgl.opengl.GL11;
 
 /**
  * A single object in the game.
@@ -16,39 +17,37 @@ public class GameObject {
 	/**
 	 * the behaviors
 	 */
-	private final ClassKeyedContainer<Behavior> behaviors = new ClassKeyedContainer<>();
+	private final Map<String, Behavior> behaviors = new HashMap<>();
 
 	/**
-	 * Attaches a behavior to this object. Throws an exception if another behavior of
-	 * the same type is already attached -- in this case, reasons exist to keep either
+	 * Attaches a behavior to this object. Throws an exception if another behavior with
+	 * the same ID is already attached -- in this case, reasons exist to keep either
 	 * one, so no sensible default handling can be defined. 
 	 * 
 	 * @param behavior the behavior to attach
 	 */
 	public void attachBehavior(Behavior behavior) {
-		@SuppressWarnings("unchecked")
-		Class<? extends Behavior> key = behavior.getClass();
-		Behavior previous = behaviors.set(key, behavior);
+		String id = behavior.getId();
+		Behavior previous = behaviors.put(id, behavior);
 		if (previous == null) {
 			behavior.onAttach(this);
 		} else if (previous != behavior) {
-			behaviors.set(key, previous);
-			throw new IllegalStateException("a behavior of type " + behavior.getClass() + " is already attached to this object");
+			behaviors.put(id, previous);
+			throw new IllegalStateException("a behavior with ID " + id + " is already attached to this object");
 		}
 	}
-	
+
 	/**
-	 * Attaches a behavior to this object. If another behavior of the same type is
+	 * Attaches a behavior to this object. If another behavior with the same ID is
 	 * already attached, then the "replace" parameter determines whether that
 	 * behavior gets replaced (true) or if this method should have no effect (false). 
 	 * 
 	 * @param behavior the behavior to attach
-	 * @param replace whether another behavior of the same type should be replaced
+	 * @param replace whether another behavior with the same ID should be replaced
 	 */
 	public void attachBehavior(Behavior behavior, boolean replace) {
-		@SuppressWarnings("unchecked")
-		Class<? extends Behavior> key = behavior.getClass();
-		Behavior previous = behaviors.set(key, behavior);
+		String id = behavior.getId();
+		Behavior previous = behaviors.put(id, behavior);
 		if (previous == null) {
 			behavior.onAttach(this);
 		} else if (previous == behavior) {
@@ -57,41 +56,81 @@ public class GameObject {
 			previous.onDetach(this);
 			behavior.onAttach(this);
 		} else {
-			behaviors.set(key, previous);
+			behaviors.put(id, previous);
 		}
 	}
-	
-	
+
 	/**
-	 * Detaches a behavior from this object. Does nothing if the behavior isn't currently
-	 * attached.
+	 * Detaches the specified behavior from this object. Does nothing if the
+	 * behavior isn't currently attached.
 	 * 
 	 * @param behavior the behavior to detach
 	 * @return true if the behavior was attached and is now detached; false if the behavior
 	 * wasn't attached
 	 */
 	public boolean detachBehavior(Behavior behavior) {
-		Class<? extends Behavior> key = behavior.getClass();
-		Behavior previous = behaviors.remove(key);
+		String id = behavior.getId();
+		Behavior previous = behaviors.remove(id);
 		if (previous == null) {
 			return false;
 		} else if (previous == behavior) {
 			behavior.onDetach(this);
 			return true;
 		} else {
-			behaviors.set(key, previous);
+			behaviors.put(id, previous);
 			return false;
 		}
 	}
-	
+
 	/**
-	 * Obtains the behavior object for the specified behavior class.
+	 * Detaches a behavior with the specified ID from this object. Does nothing if
+	 * no such behavior isn't currently attached.
 	 * 
-	 * @param behaviorClass the behavior class
+	 * @param id the ID of the behavior to detach
+	 * @return true if the behavior was attached and is now detached; false if the behavior
+	 * wasn't attached
+	 */
+	public boolean detachBehavior(String id) {
+		Behavior previous = behaviors.remove(id);
+		if (previous == null) {
+			return false;
+		} else {
+			previous.onDetach(this);
+			return true;
+		}
+	}
+
+	/**
+	 * Detaches a behavior from this object whose ID is the fully qualified name
+	 * of the specified class. Does nothing if no such behavior isn't currently attached.
+	 * 
+	 * @param idClass the class whose fully qualified name is the ID of the behavior to detach
+	 * @return true if the behavior was attached and is now detached; false if the behavior
+	 * wasn't attached
+	 */
+	public boolean detachBehavior(Class<?> idClass) {
+		return detachBehavior(idClass.getName());
+	}
+
+	/**
+	 * Obtains the behavior object for the specified ID.
+	 * 
+	 * @param id the behavior ID
 	 * @return the behavior object
 	 */
-	public <T extends Behavior> T getBehavior(Class<? extends T> behaviorClass) {
-		return behaviors.get(behaviorClass);
+	public Behavior getBehavior(String id) {
+		return behaviors.get(id);
+	}
+
+	/**
+	 * Obtains the behavior object whose ID is the fully qualified name of the
+	 * specified class, cast to that class.
+	 * 
+	 * @param idClass the class whose fully qualified name is the ID of the behavior to return
+	 * @return the behavior object
+	 */
+	public <T> T getBehavior(Class<? extends T> idClass) {
+		return idClass.cast(getBehavior(idClass.getName()));
 	}
 
 	/**
@@ -99,10 +138,10 @@ public class GameObject {
 	 */
 	public void draw() {
 		GL11.glPushMatrix();
-		for (Behavior behavior : behaviors.getValues()) {
+		for (Behavior behavior : behaviors.values()) {
 			behavior.prepareRenderState(this);
 		}
-		for (Behavior behavior : behaviors.getValues()) {
+		for (Behavior behavior : behaviors.values()) {
 			behavior.draw(this);
 		}
 		GL11.glPopMatrix();
@@ -112,7 +151,7 @@ public class GameObject {
 	 * Handles the game logic for a single game step for this object.
 	 */
 	public void handleStep() {
-		for (Behavior behavior : behaviors.getValues()) {
+		for (Behavior behavior : behaviors.values()) {
 			behavior.handleStep(this);
 		}
 	}
