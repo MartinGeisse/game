@@ -7,6 +7,9 @@
 package game.martin;
 
 import game.core.GameObject;
+import game.core.blockmap.BlockMapBehavior;
+import game.core.blockmap.BlockMapEditor;
+import game.core.blockmap.TextureProvider;
 import game.core.geometry.MutablePosition;
 import game.core.geometry.Position;
 import game.core.gfx.DrawSpriteBehavior;
@@ -16,6 +19,7 @@ import game.core.gfx.SpriteProvider;
 import game.core.movement.AbstractJumpAndRunBehavior;
 import game.core.movement.LeftRightOrientationBehavior;
 import game.core.movement.PositionBehavior;
+import game.engine.gfx.Texture;
 import game.engine.resource.Resources;
 import game.engine.system.EngineLauncher;
 
@@ -37,6 +41,33 @@ public class Main {
 		Sprite playerLeft = new Sprite(Resources.getTexture("sprites/player-left.png"), 20, 20, 20, 20);
 		Sprite playerRight = new Sprite(Resources.getTexture("sprites/player-right.png"), 20, 20, 20, 20);
 		SpriteProvider playerSpriteProvider = new LeftRightSpriteProvider(playerLeft, playerRight);
+		
+		TextureProvider blockMapTextureProvider = new TextureProvider() {
+			@Override
+			public Texture getBlockTexture(int blockValue) {
+				switch (blockValue) {
+				
+				case 0:
+					return null;
+					
+				case 1:
+					return Resources.getTexture("blockmap/ground.png");
+
+				case 2:
+					return Resources.getTexture("blockmap/deep-ground.png");
+					
+				default:
+					return Resources.getTexture("blockmap/tile1.png");
+
+				}
+			}
+		};
+		BlockMapBehavior blockMapBehavior = new BlockMapBehavior(30, 30);
+		blockMapBehavior.setTextureProvider(blockMapTextureProvider);
+		drawMap(new BlockMapEditor(blockMapBehavior));
+		GameObject blockMap = new GameObject();
+		blockMap.attachBehavior(blockMapBehavior);
+		launcher.getInitialRegion().getGameObjects().add(blockMap);
 		
 		GameObject testObject = new GameObject();
 		testObject.attachBehavior(new PositionBehavior(new Position(100 << 8, 100 << 8)));
@@ -74,12 +105,21 @@ public class Main {
 			}
 			
 		});
-
 		launcher.getInitialRegion().getGameObjects().add(testObject);
+		
 		launcher.loop();
 		launcher.cleanup();
 		System.exit(0);
 
+	}
+	
+	/**
+	 * 
+	 */
+	private static void drawMap(BlockMapEditor map) {
+		map.withBlock(1).hline(0, 15, 20);
+		map.withBlock(2).hline(0, 16, 20);
+		map.withBlock(2).hline(0, 16, 20);
 	}
 
 }
