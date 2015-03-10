@@ -12,15 +12,26 @@ import org.lwjgl.opengl.Util;
 
 
 /**
- * The main game engine object.
+ * The main game object.
  */
-public class Engine {
+public class Game {
 
 	/**
 	 * the currentRegion
 	 */
 	private Region currentRegion;
 
+	/**
+	 * the zoom
+	 */
+	private float zoom = 1.0f;
+	
+	/**
+	 * Constructor.
+	 */
+	public Game() {
+	}
+	
 	/**
 	 * Getter method for the currentRegion.
 	 * @return the currentRegion
@@ -41,9 +52,11 @@ public class Engine {
 	 * Draws the screen contents using OpenGL.
 	 */
 	public void draw() {
+		float w = 30.0f * Display.getWidth() / Display.getHeight() / zoom;
+		float h = 30.0f / zoom;
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
-		GL11.glOrtho(0, Display.getWidth() << 8, Display.getHeight() << 8, 0, -1, 1);
+		GL11.glOrtho(0, w, h, 0, -1, 1);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glLoadIdentity();
 		GL11.glEnable(GL11.GL_BLEND);

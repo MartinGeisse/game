@@ -16,19 +16,19 @@ public abstract class ImmutablePositionBase extends ReadablePosition {
 	/**
 	 * the x
 	 */
-	public final int x;
+	public final float x;
 
 	/**
 	 * the y
 	 */
-	public final int y;
+	public final float y;
 
 	/**
 	 * Constructor.
 	 * @param x the x coordinate
 	 * @param y the y coordinate
 	 */
-	public ImmutablePositionBase(int x, int y) {
+	public ImmutablePositionBase(float x, float y) {
 		this.x = x;
 		this.y = y;
 	}
@@ -38,7 +38,7 @@ public abstract class ImmutablePositionBase extends ReadablePosition {
 	 * @return the x
 	 */
 	@Override
-	public int getX() {
+	public float getX() {
 		return x;
 	}
 
@@ -47,7 +47,7 @@ public abstract class ImmutablePositionBase extends ReadablePosition {
 	 * @return the y
 	 */
 	@Override
-	public int getY() {
+	public float getY() {
 		return y;
 	}
 

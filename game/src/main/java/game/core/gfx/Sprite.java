@@ -27,22 +27,22 @@ public final class Sprite implements SpriteProvider {
 	/**
 	 * the leftExtent
 	 */
-	private final int leftExtent;
+	private final float leftExtent;
 
 	/**
 	 * the rightExtent
 	 */
-	private final int rightExtent;
+	private final float rightExtent;
 
 	/**
 	 * the topExtent
 	 */
-	private final int topExtent;
+	private final float topExtent;
 
 	/**
 	 * the bottomExtent
 	 */
-	private final int bottomExtent;
+	private final float bottomExtent;
 
 	/**
 	 * Constructor.
@@ -52,7 +52,7 @@ public final class Sprite implements SpriteProvider {
 	 * @param topExtent the extent to the top
 	 * @param bottomExtent the extent to the bottom
 	 */
-	public Sprite(Texture texture, int leftExtent, int rightExtent, int topExtent, int bottomExtent) {
+	public Sprite(Texture texture, float leftExtent, float rightExtent, float topExtent, float bottomExtent) {
 		this.texture = texture;
 		this.leftExtent = leftExtent;
 		this.rightExtent = rightExtent;
@@ -72,7 +72,7 @@ public final class Sprite implements SpriteProvider {
 	 * Getter method for the leftExtent.
 	 * @return the leftExtent
 	 */
-	public int getLeftExtent() {
+	public float getLeftExtent() {
 		return leftExtent;
 	}
 
@@ -80,7 +80,7 @@ public final class Sprite implements SpriteProvider {
 	 * Getter method for the rightExtent.
 	 * @return the rightExtent
 	 */
-	public int getRightExtent() {
+	public float getRightExtent() {
 		return rightExtent;
 	}
 
@@ -88,7 +88,7 @@ public final class Sprite implements SpriteProvider {
 	 * Getter method for the topExtent.
 	 * @return the topExtent
 	 */
-	public int getTopExtent() {
+	public float getTopExtent() {
 		return topExtent;
 	}
 
@@ -96,7 +96,7 @@ public final class Sprite implements SpriteProvider {
 	 * Getter method for the bottomExtent.
 	 * @return the bottomExtent
 	 */
-	public int getBottomExtent() {
+	public float getBottomExtent() {
 		return bottomExtent;
 	}
 
@@ -112,13 +112,13 @@ public final class Sprite implements SpriteProvider {
 	 */
 	public void glVertices() {
 		GL11.glTexCoord2f(0.0f, 1.0f);
-		GL11.glVertex2i(-leftExtent << 8, -topExtent << 8);
+		GL11.glVertex2f(-leftExtent, -topExtent);
 		GL11.glTexCoord2f(1.0f, 1.0f);
-		GL11.glVertex2i(rightExtent << 8, -topExtent << 8);
+		GL11.glVertex2f(rightExtent, -topExtent);
 		GL11.glTexCoord2f(1.0f, 0.0f);
-		GL11.glVertex2i(rightExtent << 8, bottomExtent << 8);
+		GL11.glVertex2f(rightExtent, bottomExtent);
 		GL11.glTexCoord2f(0.0f, 0.0f);
-		GL11.glVertex2i(-leftExtent << 8, bottomExtent << 8);
+		GL11.glVertex2f(-leftExtent, bottomExtent);
 	}
 
 	/**

@@ -14,19 +14,19 @@ public class MutablePosition extends ReadablePosition {
 	/**
 	 * the x
 	 */
-	public int x;
+	public float x;
 
 	/**
 	 * the y
 	 */
-	public int y;
+	public float y;
 
 	/**
 	 * Constructor.
 	 * @param x the x coordinate
 	 * @param y the y coordinate
 	 */
-	public MutablePosition(int x, int y) {
+	public MutablePosition(float x, float y) {
 		this.x = x;
 		this.y = y;
 	}
@@ -36,7 +36,7 @@ public class MutablePosition extends ReadablePosition {
 	 * @return the x
 	 */
 	@Override
-	public int getX() {
+	public float getX() {
 		return x;
 	}
 
@@ -44,7 +44,7 @@ public class MutablePosition extends ReadablePosition {
 	 * Setter method for the x.
 	 * @param x the x
 	 */
-	public void setX(int x) {
+	public void setX(float x) {
 		this.x = x;
 	}
 
@@ -53,7 +53,7 @@ public class MutablePosition extends ReadablePosition {
 	 * @return the y
 	 */
 	@Override
-	public int getY() {
+	public float getY() {
 		return y;
 	}
 
@@ -61,7 +61,7 @@ public class MutablePosition extends ReadablePosition {
 	 * Setter method for the y.
 	 * @param y the y
 	 */
-	public void setY(int y) {
+	public void setY(float y) {
 		this.y = y;
 	}
 

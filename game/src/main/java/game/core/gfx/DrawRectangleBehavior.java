@@ -42,10 +42,10 @@ public final class DrawRectangleBehavior extends AbstractBehavior {
 	public void draw(GameObject target) {
 		color.glColor();
 		GL11.glBegin(GL11.GL_QUADS);
-		GL11.glVertex2i(10 << 8, 10 << 8);
-		GL11.glVertex2i(10 << 8, -10 << 8);
-		GL11.glVertex2i(-10 << 8, -10 << 8);
-		GL11.glVertex2i(-10 << 8, 10 << 8);
+		GL11.glVertex2f(1.0f, 1.0f);
+		GL11.glVertex2f(1.0f, -1.0f);
+		GL11.glVertex2f(-1.0f, -1.0f);
+		GL11.glVertex2f(-1.0f, 1.0f);
 		GL11.glEnd();
 	}
 	

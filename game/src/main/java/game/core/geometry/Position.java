@@ -16,7 +16,7 @@ public final class Position extends ImmutablePositionBase {
 	 * @param x the x coordinate
 	 * @param y the y coordinate
 	 */
-	public Position(int x, int y) {
+	public Position(float x, float y) {
 		super(x, y);
 	}
 

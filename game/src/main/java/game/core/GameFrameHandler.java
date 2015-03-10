@@ -13,16 +13,16 @@ import game.engine.frame.BreakFrameLoopException;
 public class GameFrameHandler extends AbstractFrameHandler {
 
 	/**
-	 * the engine
+	 * the game
 	 */
-	private final Engine engine;
+	private final Game game;
 
 	/**
 	 * Constructor.
-	 * @param engine the game engine
+	 * @param game the game
 	 */
-	public GameFrameHandler(Engine engine) {
-		this.engine = engine;
+	public GameFrameHandler(Game game) {
+		this.game = game;
 	}
 
 	/* (non-Javadoc)
@@ -30,7 +30,7 @@ public class GameFrameHandler extends AbstractFrameHandler {
 	 */
 	@Override
 	public void draw() {
-		engine.draw();
+		game.draw();
 	}
 
 	/* (non-Javadoc)
@@ -38,7 +38,7 @@ public class GameFrameHandler extends AbstractFrameHandler {
 	 */
 	@Override
 	public void handleStep() throws BreakFrameLoopException {
-		engine.handleStep();
+		game.handleStep();
 	}
 
 }

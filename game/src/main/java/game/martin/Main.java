@@ -38,8 +38,8 @@ public class Main {
 		EngineLauncher launcher = new EngineLauncher(args);
 		launcher.launch();
 
-		Sprite playerLeft = new Sprite(Resources.getTexture("sprites/player-left.png"), 20, 20, 20, 20);
-		Sprite playerRight = new Sprite(Resources.getTexture("sprites/player-right.png"), 20, 20, 20, 20);
+		Sprite playerLeft = new Sprite(Resources.getTexture("sprites/player-left.png"), 0.7f, 0.7f, 0.7f, 0.7f);
+		Sprite playerRight = new Sprite(Resources.getTexture("sprites/player-right.png"), 0.7f, 0.7f, 0.7f, 0.7f);
 		SpriteProvider playerSpriteProvider = new LeftRightSpriteProvider(playerLeft, playerRight);
 		
 		TextureProvider blockMapTextureProvider = new TextureProvider() {
@@ -70,38 +70,37 @@ public class Main {
 		launcher.getInitialRegion().getGameObjects().add(blockMap);
 		
 		GameObject testObject = new GameObject();
-		testObject.attachBehavior(new PositionBehavior(new Position(100 << 8, 100 << 8)));
+		testObject.attachBehavior(new PositionBehavior(new Position(1.0f, 1.0f)));
 		testObject.attachBehavior(new LeftRightOrientationBehavior());
 		testObject.attachBehavior(new DrawSpriteBehavior(playerSpriteProvider));
-		// testObject.attachBehavior(new CursorMoveBehavior(1500));
 		testObject.attachBehavior(new AbstractJumpAndRunBehavior() {
 			
 			/* (non-Javadoc)
 			 * @see game.core.movement.AbstractJumpAndRunBehavior#getGravity(game.core.GameObject)
 			 */
 			@Override
-			protected int getGravity(GameObject target) {
-				return 300;
+			protected float getGravity(GameObject target) {
+				return 0.10f;
 			}
 			
 			/* (non-Javadoc)
-			 * @see game.core.movement.AbstractJumpAndRunBehavior#adjustHorizontalMovement(game.core.GameObject, int)
+			 * @see game.core.movement.AbstractJumpAndRunBehavior#adjustHorizontalMovement(game.core.GameObject, float)
 			 */
 			@Override
-			protected int adjustHorizontalMovement(GameObject target, int dx) {
+			protected float adjustHorizontalMovement(GameObject target, float dx) {
 				MutablePosition mutablePosition = target.getBehavior(PositionBehavior.class).getMutablePosition();
-				dx = Math.max(dx, (100 << 8) - mutablePosition.getX());
-				dx = Math.min(dx, (700 << 8) - mutablePosition.getX());
+				dx = Math.max(dx, 2.0f - mutablePosition.getX());
+				dx = Math.min(dx, 40.f - mutablePosition.getX());
 				return dx;
 			}
 			
 			/* (non-Javadoc)
-			 * @see game.core.movement.AbstractJumpAndRunBehavior#adjustVerticalMovement(game.core.GameObject, int)
+			 * @see game.core.movement.AbstractJumpAndRunBehavior#adjustVerticalMovement(game.core.GameObject, float)
 			 */
 			@Override
-			protected int adjustVerticalMovement(GameObject target, int dy) {
+			protected float adjustVerticalMovement(GameObject target, float dy) {
 				MutablePosition mutablePosition = target.getBehavior(PositionBehavior.class).getMutablePosition();
-				return Math.min(dy, (500 << 8) - mutablePosition.getY());
+				return Math.min(dy, 20.0f - mutablePosition.getY());
 			}
 			
 		});

@@ -124,9 +124,7 @@ public class BlockMapBehavior extends AbstractBehavior {
 		}
 		int w = Math.min(width, 27);
 		int h = Math.min(height, 20);
-		float s = 256 * 30;
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		GL11.glScalef(s, s, 1.0f);
 		GL11.glColor3ub((byte)255, (byte)255, (byte)255);
 		for (int x=0; x<w; x++) {
 			for (int y=0; y<h; y++) {

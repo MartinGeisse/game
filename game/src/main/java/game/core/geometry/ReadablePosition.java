@@ -15,12 +15,12 @@ public abstract class ReadablePosition {
 	 * Getter method for the x.
 	 * @return the x
 	 */
-	public abstract int getX();
+	public abstract float getX();
 
 	/**
 	 * Getter method for the y.
 	 * @return the y
 	 */
-	public abstract int getY();
+	public abstract float getY();
 
 }

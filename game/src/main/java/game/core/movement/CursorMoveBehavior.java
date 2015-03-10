@@ -19,20 +19,20 @@ public final class CursorMoveBehavior extends AbstractBehavior {
 	/**
 	 * the speed
 	 */
-	private int speed;
+	private float speed;
 
 	/**
 	 * Constructor.
 	 */
 	public CursorMoveBehavior() {
-		this(1000);
+		this(1.0f);
 	}
 
 	/**
 	 * Constructor.
 	 * @param speed the movement speed (units per frame)
 	 */
-	public CursorMoveBehavior(int speed) {
+	public CursorMoveBehavior(float speed) {
 		this.speed = speed;
 	}
 
@@ -40,7 +40,7 @@ public final class CursorMoveBehavior extends AbstractBehavior {
 	 * Getter method for the speed.
 	 * @return the speed
 	 */
-	public int getSpeed() {
+	public float getSpeed() {
 		return speed;
 	}
 
@@ -48,7 +48,7 @@ public final class CursorMoveBehavior extends AbstractBehavior {
 	 * Setter method for the speed.
 	 * @param speed the speed to set
 	 */
-	public void setSpeed(int speed) {
+	public void setSpeed(float speed) {
 		this.speed = speed;
 	}
 
@@ -70,7 +70,7 @@ public final class CursorMoveBehavior extends AbstractBehavior {
 	/**
 	 * 
 	 */
-	private boolean handleKey(GameObject target, int key, int dx, int dy) {
+	private boolean handleKey(GameObject target, int key, float dx, float dy) {
 		if (Keyboard.isKeyDown(key)) {
 			MutablePosition mutablePosition = target.getBehavior(PositionBehavior.class).getMutablePosition();
 			mutablePosition.setX(mutablePosition.getX() + dx);

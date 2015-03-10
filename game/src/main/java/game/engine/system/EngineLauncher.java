@@ -4,7 +4,7 @@
 
 package game.engine.system;
 
-import game.core.Engine;
+import game.core.Game;
 import game.core.GameFrameHandler;
 import game.core.Region;
 import game.engine.frame.FrameLoop;
@@ -35,7 +35,7 @@ public class EngineLauncher {
 	/**
 	 * the engine
 	 */
-	private final Engine engine;
+	private final Game engine;
 	
 	/**
 	 * the frameLoop
@@ -62,7 +62,7 @@ public class EngineLauncher {
 	 * @param args command-line arguments
 	 */
 	public EngineLauncher(String[] args) {
-		engine = new Engine();
+		engine = new Game();
 		engine.setCurrentRegion(new Region());
 		frameLoop = new FrameLoop();
 
@@ -81,7 +81,7 @@ public class EngineLauncher {
 	 * Getter method for the engine.
 	 * @return the engine
 	 */
-	public Engine getEngine() {
+	public Game getEngine() {
 		return engine;
 	}
 

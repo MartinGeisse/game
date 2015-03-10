@@ -22,18 +22,18 @@ public abstract class AbstractJumpAndRunBehavior extends AbstractBehavior {
 	/**
 	 * the HORIZONTAL_SPEED
 	 */
-	private static final int HORIZONTAL_SPEED = 1500;
+	private static final float HORIZONTAL_SPEED = 0.5f;
 	
 	/**
 	 * the verticalSpeed
 	 */
-	private int verticalSpeed = 0;
+	private float verticalSpeed = 0;
 
 	/**
 	 * Getter method for the verticalSpeed.
 	 * @return the verticalSpeed
 	 */
-	public int getVerticalSpeed() {
+	public float getVerticalSpeed() {
 		return verticalSpeed;
 	}
 
@@ -41,7 +41,7 @@ public abstract class AbstractJumpAndRunBehavior extends AbstractBehavior {
 	 * Setter method for the verticalSpeed.
 	 * @param verticalSpeed the verticalSpeed to set
 	 */
-	public void setVerticalSpeed(int verticalSpeed) {
+	public void setVerticalSpeed(float verticalSpeed) {
 		this.verticalSpeed = verticalSpeed;
 	}
 
@@ -57,14 +57,14 @@ public abstract class AbstractJumpAndRunBehavior extends AbstractBehavior {
 
 		// vertical movement
 		verticalSpeed += getGravity(target);
-		int dy = adjustVerticalMovement(target, verticalSpeed);
+		float dy = adjustVerticalMovement(target, verticalSpeed);
 		MutablePosition mutablePosition = target.getBehavior(PositionBehavior.class).getMutablePosition();
 		mutablePosition.setY(mutablePosition.getY() + dy);
 		if (dy != verticalSpeed) {
 			verticalSpeed = 0;
 			// TODO only if blocked by floor, not ceiling
 			if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-				verticalSpeed = -5000;
+				verticalSpeed = -1.2f;
 			}
 		}
 
@@ -73,7 +73,7 @@ public abstract class AbstractJumpAndRunBehavior extends AbstractBehavior {
 	/**
 	 * 
 	 */
-	private void handleHorizontalMovementKey(GameObject target, int key, int dx, LeftRight leftRight) {
+	private void handleHorizontalMovementKey(GameObject target, int key, float dx, LeftRight leftRight) {
 		if (Keyboard.isKeyDown(key)) {
 			dx = adjustHorizontalMovement(target, dx);
 			MutablePosition mutablePosition = target.getBehavior(PositionBehavior.class).getMutablePosition();
@@ -93,7 +93,7 @@ public abstract class AbstractJumpAndRunBehavior extends AbstractBehavior {
 	 * @param dx the x position delta
 	 * @return the adjusted position delta
 	 */
-	protected abstract int adjustHorizontalMovement(GameObject target, int dx);
+	protected abstract float adjustHorizontalMovement(GameObject target, float dx);
 
 	/**
 	 * Checks whether vertical movement is allowed or blocked, and adjusts the
@@ -105,7 +105,7 @@ public abstract class AbstractJumpAndRunBehavior extends AbstractBehavior {
 	 * @param dy the y position delta
 	 * @return the adjusted position delta
 	 */
-	protected abstract int adjustVerticalMovement(GameObject target, int dy);
+	protected abstract float adjustVerticalMovement(GameObject target, float dy);
 
 	/**
 	 * Determines the gravity for the specified object.
@@ -113,6 +113,6 @@ public abstract class AbstractJumpAndRunBehavior extends AbstractBehavior {
 	 * @param target the target object
 	 * @return the gravity
 	 */
-	protected abstract int getGravity(GameObject target);
+	protected abstract float getGravity(GameObject target);
 
 }
