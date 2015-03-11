@@ -9,14 +9,14 @@ package game.martin;
 import game.core.GameObject;
 import game.core.blockmap.BlockMapBehavior;
 import game.core.blockmap.BlockMapEditor;
+import game.core.blockmap.BlockMapProbe;
 import game.core.blockmap.TextureProvider;
-import game.core.geometry.MutablePosition;
 import game.core.geometry.Position;
 import game.core.gfx.DrawSpriteBehavior;
 import game.core.gfx.LeftRightSpriteProvider;
 import game.core.gfx.Sprite;
 import game.core.gfx.SpriteProvider;
-import game.core.movement.AbstractJumpAndRunBehavior;
+import game.core.movement.AbstractBlockMapJumpAndRunBehavior;
 import game.core.movement.LeftRightOrientationBehavior;
 import game.core.movement.PositionBehavior;
 import game.engine.gfx.Texture;
@@ -69,44 +69,23 @@ public class Main {
 		blockMap.attachBehavior(blockMapBehavior);
 		launcher.getInitialRegion().getGameObjects().add(blockMap);
 		
+		boolean[] blockValuesSolid = new boolean[256];
+		blockValuesSolid[1] = true;
+		blockValuesSolid[2] = true;
+		BlockMapProbe blockMapProbe = new BlockMapProbe(blockMapBehavior, 0.4f, 0.4f, 0.5f, 0.5f);
 		GameObject testObject = new GameObject();
 		testObject.attachBehavior(new PositionBehavior(new Position(1.0f, 1.0f)));
 		testObject.attachBehavior(new LeftRightOrientationBehavior());
 		testObject.attachBehavior(new DrawSpriteBehavior(playerSpriteProvider));
-		testObject.attachBehavior(new AbstractJumpAndRunBehavior() {
-			
-			/* (non-Javadoc)
-			 * @see game.core.movement.AbstractJumpAndRunBehavior#getGravity(game.core.GameObject)
-			 */
+		testObject.attachBehavior(new AbstractBlockMapJumpAndRunBehavior(blockMapProbe, blockValuesSolid) {
 			@Override
 			protected float getGravity(GameObject target) {
-				return 0.10f;
+				return 0.04f;
 			}
-			
-			/* (non-Javadoc)
-			 * @see game.core.movement.AbstractJumpAndRunBehavior#adjustHorizontalMovement(game.core.GameObject, float)
-			 */
-			@Override
-			protected float adjustHorizontalMovement(GameObject target, float dx) {
-				MutablePosition mutablePosition = target.getBehavior(PositionBehavior.class).getMutablePosition();
-				dx = Math.max(dx, 2.0f - mutablePosition.getX());
-				dx = Math.min(dx, 40.f - mutablePosition.getX());
-				return dx;
-			}
-			
-			/* (non-Javadoc)
-			 * @see game.core.movement.AbstractJumpAndRunBehavior#adjustVerticalMovement(game.core.GameObject, float)
-			 */
-			@Override
-			protected float adjustVerticalMovement(GameObject target, float dy) {
-				MutablePosition mutablePosition = target.getBehavior(PositionBehavior.class).getMutablePosition();
-				return Math.min(dy, 20.0f - mutablePosition.getY());
-			}
-			
 		});
 		launcher.getInitialRegion().getGameObjects().add(testObject);
 		
-		launcher.loop();
+		launcher.loop(20);
 		launcher.cleanup();
 		System.exit(0);
 
@@ -118,7 +97,9 @@ public class Main {
 	private static void drawMap(BlockMapEditor map) {
 		map.withBlock(1).hline(0, 15, 20);
 		map.withBlock(2).hline(0, 16, 20);
-		map.withBlock(2).hline(0, 16, 20);
+		map.withBlock(2).vline(10, 13, 4);
+		map.withBlock(1).setBlock(10, 12);
+		map.withBlock(1).setBlock(5, 11);
 	}
 
 }

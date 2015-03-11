@@ -22,8 +22,13 @@ public abstract class AbstractJumpAndRunBehavior extends AbstractBehavior {
 	/**
 	 * the HORIZONTAL_SPEED
 	 */
-	private static final float HORIZONTAL_SPEED = 0.5f;
-	
+	private static final float HORIZONTAL_SPEED = 0.3f;
+
+	/**
+	 * the MAX_VERTICAL_SPEED
+	 */
+	private static final float MAX_VERTICAL_SPEED = 0.8f;
+
 	/**
 	 * the verticalSpeed
 	 */
@@ -57,6 +62,9 @@ public abstract class AbstractJumpAndRunBehavior extends AbstractBehavior {
 
 		// vertical movement
 		verticalSpeed += getGravity(target);
+		if (verticalSpeed > MAX_VERTICAL_SPEED) {
+			verticalSpeed = MAX_VERTICAL_SPEED;
+		}
 		float dy = adjustVerticalMovement(target, verticalSpeed);
 		MutablePosition mutablePosition = target.getBehavior(PositionBehavior.class).getMutablePosition();
 		mutablePosition.setY(mutablePosition.getY() + dy);
@@ -64,7 +72,7 @@ public abstract class AbstractJumpAndRunBehavior extends AbstractBehavior {
 			verticalSpeed = 0;
 			// TODO only if blocked by floor, not ceiling
 			if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-				verticalSpeed = -1.2f;
+				verticalSpeed = -0.7f;
 			}
 		}
 

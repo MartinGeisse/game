@@ -209,9 +209,11 @@ public class EngineLauncher {
 
 	/**
 	 * Runs the main loop.
+	 * 
+	 * @param frameInterval the (minimum) frame interval in milliseconds
 	 */
-	public void loop() {
-		frameLoop.executeLoop(30);
+	public void loop(int frameInterval) {
+		frameLoop.executeLoop(frameInterval);
 	}
 	
 	/**

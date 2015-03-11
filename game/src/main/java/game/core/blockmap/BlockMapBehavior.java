@@ -31,6 +31,11 @@ public class BlockMapBehavior extends AbstractBehavior {
 	private final byte[] data;
 
 	/**
+	 * the borderValue
+	 */
+	private byte borderValue;
+
+	/**
 	 * the textureProvider
 	 */
 	private TextureProvider textureProvider;
@@ -69,7 +74,11 @@ public class BlockMapBehavior extends AbstractBehavior {
 	 * @return the block
 	 */
 	public int getBlock(int x, int y) {
-		return data[getIndex(x, y)] & 0xff;
+		if (x < 0 || x >= width || y < 0 || y >= height) {
+			return borderValue;
+		} else {
+			return data[y * width + x] & 0xff;
+		}
 	}
 
 	/**
@@ -79,21 +88,29 @@ public class BlockMapBehavior extends AbstractBehavior {
 	 * @param value the value to set, in the range 0..255
 	 */
 	public void setBlock(int x, int y, int value) {
-		int index = getIndex(x, y);
-		if (value < 0 || value > 255) {
-			throw new IllegalArgumentException("invalid block value: " + value);
-		}
-		data[index] = (byte)value;
-	}
-
-	/**
-	 * 
-	 */
-	private int getIndex(int x, int y) {
 		if (x < 0 || x >= width || y < 0 || y >= height) {
 			throw new IllegalArgumentException("invalid position (" + x + ", " + y + ") for map size (" + width + " x " + height + ")");
 		}
-		return (y * width + x);
+		if (value < 0 || value > 255) {
+			throw new IllegalArgumentException("invalid block value: " + value);
+		}
+		data[y * width + x] = (byte)value;
+	}
+
+	/**
+	 * Getter method for the borderValue.
+	 * @return the borderValue
+	 */
+	public byte getBorderValue() {
+		return borderValue;
+	}
+
+	/**
+	 * Setter method for the borderValue.
+	 * @param borderValue the borderValue to set
+	 */
+	public void setBorderValue(byte borderValue) {
+		this.borderValue = borderValue;
 	}
 
 	/**
@@ -126,8 +143,8 @@ public class BlockMapBehavior extends AbstractBehavior {
 		int h = Math.min(height, 20);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glColor3ub((byte)255, (byte)255, (byte)255);
-		for (int x=0; x<w; x++) {
-			for (int y=0; y<h; y++) {
+		for (int x = 0; x < w; x++) {
+			for (int y = 0; y < h; y++) {
 				Texture texture = textureProvider.getBlockTexture(getBlock(x, y));
 				if (texture == null) {
 					continue;
