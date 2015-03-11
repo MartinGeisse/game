@@ -1,1 +1,5 @@
+http://opengameart.org/content/spinning-gold-coin
+	coin.png
 http://opengameart.org/content/classic-hero-and-baddies-pack
+	player-left.png
+	player-right.png

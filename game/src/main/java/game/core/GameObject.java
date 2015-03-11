@@ -4,6 +4,7 @@
 
 package game.core;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -151,7 +152,7 @@ public class GameObject {
 	 * Handles the game logic for a single game step for this object.
 	 */
 	public void handleStep() {
-		for (Behavior behavior : behaviors.values()) {
+		for (Behavior behavior : new ArrayList<>(behaviors.values())) {
 			behavior.handleStep(this);
 		}
 	}

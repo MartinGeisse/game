@@ -72,11 +72,16 @@ public final class DefaultResouceLoader implements ResourceLoader {
 			format = "OGG";
 			break;
 			
+		case "wav":
+			format = "WAV";
+			break;
+			
 		default:
 			throw new RuntimeException("unknown sound file extension: " + extension);
 			
 		}
-		try (InputStream inputStream = new FileInputStream("resource/sounds/" + filename)) {
+		
+		try (InputStream inputStream = org.newdawn.slick.util.ResourceLoader.getResourceAsStream("resource/sounds/" + filename)) {
 			return AudioLoader.getAudio(format, inputStream);
 		}
 	}

@@ -19,7 +19,7 @@ public class Region {
 	 * the gameObjects
 	 */
 	private final List<GameObject> gameObjects = new ArrayList<GameObject>();
-	
+
 	/**
 	 * Getter method for the gameObjects.
 	 * @return the gameObjects
@@ -43,7 +43,8 @@ public class Region {
 	 * Handles a game step. This method performs the game logic.
 	 */
 	public void handleStep() {
-		for (GameObject gameObject : gameObjects) {
+		List<GameObject> gameObjectsListClone = new ArrayList<>(gameObjects);
+		for (GameObject gameObject : gameObjectsListClone) {
 			gameObject.handleStep();
 		}
 	}
