@@ -10,6 +10,7 @@ import game.core.GameObject;
 import game.core.blockmap.BlockMapBehavior;
 import game.core.blockmap.BlockMapEditor;
 import game.core.blockmap.BlockMapProbe;
+import game.core.blockmap.BlockMapProbe.IsolatedBlockHandler;
 import game.core.blockmap.TextureProvider;
 import game.core.geometry.Position;
 import game.core.gfx.DrawSpriteBehavior;
@@ -23,10 +24,17 @@ import game.engine.gfx.Texture;
 import game.engine.resource.Resources;
 import game.engine.system.EngineLauncher;
 
+import java.util.List;
+
 /**
  * The main class.
  */
 public class Main {
+
+	
+	public interface ListFactory {
+		public List<?> createString();
+	}
 
 	/**
 	 * The main method.
@@ -69,15 +77,13 @@ public class Main {
 		blockMap.attachBehavior(blockMapBehavior);
 		launcher.getInitialRegion().getGameObjects().add(blockMap);
 		
-		boolean[] blockValuesSolid = new boolean[256];
-		blockValuesSolid[1] = true;
-		blockValuesSolid[2] = true;
-		BlockMapProbe blockMapProbe = new BlockMapProbe(blockMapBehavior, 0.4f, 0.4f, 0.5f, 0.5f);
+		IsolatedBlockHandler<Boolean> solidity = (map, x, y, block) -> (x < 0 || x >= map.getWidth() || y < 0 || y >= map.getHeight() || block == 1 || block == 2);
+		BlockMapProbe blockMapProbe = new BlockMapProbe(blockMapBehavior, 0.4f, 0.4f, 0.5f, 0.55f);
 		GameObject testObject = new GameObject();
 		testObject.attachBehavior(new PositionBehavior(new Position(1.0f, 1.0f)));
 		testObject.attachBehavior(new LeftRightOrientationBehavior());
 		testObject.attachBehavior(new DrawSpriteBehavior(playerSpriteProvider));
-		testObject.attachBehavior(new AbstractBlockMapJumpAndRunBehavior(blockMapProbe, blockValuesSolid) {
+		testObject.attachBehavior(new AbstractBlockMapJumpAndRunBehavior(blockMapProbe, solidity) {
 			@Override
 			protected float getGravity(GameObject target) {
 				return 0.04f;

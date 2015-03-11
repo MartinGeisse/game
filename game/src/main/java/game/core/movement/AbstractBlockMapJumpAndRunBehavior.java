@@ -6,6 +6,7 @@ package game.core.movement;
 
 import game.core.GameObject;
 import game.core.blockmap.BlockMapProbe;
+import game.core.blockmap.BlockMapProbe.IsolatedBlockHandler;
 import game.core.geometry.MutablePosition;
 import game.core.geometry.Position;
 
@@ -20,19 +21,19 @@ public abstract class AbstractBlockMapJumpAndRunBehavior extends AbstractJumpAnd
 	private final BlockMapProbe blockMapProbe;
 	
 	/**
-	 * the blockValuesSolid
+	 * the blockSolidity
 	 */
-	private final boolean[] blockValuesSolid;
+	private final IsolatedBlockHandler<Boolean> blockSolidity;
 	
 
 	/**
 	 * Constructor.
 	 * @param blockMapProbe the probe used for collision detection
-	 * @param blockValuesSolid specifies which blocks are solid
+	 * @param blockSolidity specifies which blocks are solid
 	 */
-	public AbstractBlockMapJumpAndRunBehavior(BlockMapProbe blockMapProbe, final boolean[] blockValuesSolid) {
+	public AbstractBlockMapJumpAndRunBehavior(BlockMapProbe blockMapProbe, final IsolatedBlockHandler<Boolean> blockSolidity) {
 		this.blockMapProbe = blockMapProbe;
-		this.blockValuesSolid = blockValuesSolid;
+		this.blockSolidity = blockSolidity;
 	}
 
 	/* (non-Javadoc)
@@ -40,7 +41,17 @@ public abstract class AbstractBlockMapJumpAndRunBehavior extends AbstractJumpAnd
 	 */
 	@Override
 	protected float adjustHorizontalMovement(GameObject target, float dx) {
-		return (isBlocked(target, dx, 0) ? 0 : dx);
+		if (!isBlocked(target, dx, 0)) {
+			return dx;
+		}
+		float dxTotal = 0;
+		for (int i = 0; i < 3; i++) {
+			dx = dx / 2.0f;
+			if (!isBlocked(target, dxTotal + dx, 0)) {
+				dxTotal += dx;
+			}
+		}
+		return dxTotal;
 	}
 
 	/* (non-Javadoc)
@@ -48,7 +59,17 @@ public abstract class AbstractBlockMapJumpAndRunBehavior extends AbstractJumpAnd
 	 */
 	@Override
 	protected float adjustVerticalMovement(GameObject target, float dy) {
-		return (isBlocked(target, 0, dy) ? 0 : dy);
+		if (!isBlocked(target, 0, dy)) {
+			return dy;
+		}
+		float dyTotal = 0;
+		for (int i = 0; i < 3; i++) {
+			dy = dy / 2.0f;
+			if (!isBlocked(target, 0, dyTotal + dy)) {
+				dyTotal += dy;
+			}
+		}
+		return dyTotal;
 	}
 	
 	/**
@@ -57,7 +78,7 @@ public abstract class AbstractBlockMapJumpAndRunBehavior extends AbstractJumpAnd
 	private boolean isBlocked(GameObject target, float dx, float dy) {
 		MutablePosition position = target.getBehavior(PositionBehavior.class).getMutablePosition();
 		Position newPosition = new Position(position.getX() + dx, position.getY() + dy);
-		return blockMapProbe.checkAny(newPosition, blockValuesSolid);
+		return blockMapProbe.checkAny(newPosition, blockSolidity);
 	}
 
 }

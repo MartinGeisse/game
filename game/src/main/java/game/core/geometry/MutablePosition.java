@@ -14,12 +14,12 @@ public class MutablePosition extends ReadablePosition {
 	/**
 	 * the x
 	 */
-	public float x;
+	private float x;
 
 	/**
 	 * the y
 	 */
-	public float y;
+	private float y;
 
 	/**
 	 * Constructor.
