@@ -90,22 +90,23 @@ public class Main {
 		BlockMapBehavior blockMapBehavior = new BlockMapBehavior(30, 30);
 		blockMapBehavior.setTextureProvider(blockMapTextureProvider);
 		drawMap(new BlockMapEditor(blockMapBehavior));
-		GameObject blockMap = launcher.getInitialRegion().createGameObject();
+		GameObject blockMap = new GameObject();
 		blockMap.attachBehavior(blockMapBehavior);
+		launcher.getInitialRegion().getGameObjects().add(blockMap);
 
 		IsolatedBlockHandler<Boolean> solidity = new Solidity();
 		BlockMapProbe blockMapProbe = new BlockMapProbe(blockMapBehavior, 0.4f, 0.4f, 0.5f, 0.55f);
-		GameObject testObject = launcher.getInitialRegion().createGameObject();
-		testObject.attachBehavior(new PositionBehavior(new Position(1.0f, 1.0f)));
-		testObject.attachBehavior(new LeftRightOrientationBehavior());
-		testObject.attachBehavior(new DrawSpriteBehavior(playerSpriteProvider));
-		testObject.attachBehavior(new AbstractBlockMapJumpAndRunBehavior(blockMapProbe, solidity) {
+		GameObject player = new GameObject();
+		player.attachBehavior(new PositionBehavior(new Position(1.0f, 1.0f)));
+		player.attachBehavior(new LeftRightOrientationBehavior());
+		player.attachBehavior(new DrawSpriteBehavior(playerSpriteProvider));
+		player.attachBehavior(new AbstractBlockMapJumpAndRunBehavior(blockMapProbe, solidity) {
 			@Override
 			protected float getGravity(GameObject target) {
 				return 0.04f;
 			}
 		});
-		testObject.attachBehavior(new AbstractForeachBlockBehaviour(blockMapProbe) {
+		player.attachBehavior(new AbstractForeachBlockBehaviour(blockMapProbe) {
 			@Override
 			public Void handle(BlockMapBehavior blockMap, int x, int y, int blockValue) {
 				if (blockValue == 3) {
@@ -115,6 +116,7 @@ public class Main {
 				return null;
 			}
 		});
+		launcher.getInitialRegion().getGameObjects().add(player);
 
 		launcher.loop(20);
 		launcher.cleanup();

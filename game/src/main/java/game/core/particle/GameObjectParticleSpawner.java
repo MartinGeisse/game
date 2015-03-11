@@ -37,15 +37,16 @@ public class GameObjectParticleSpawner implements ParticleSpawner {
 	 */
 	@Override
 	public void spawnParticle(float x, float y, float dx, float dy, float gravity, SpriteProvider spriteProvider) {
-		GameObject particle = region.createGameObject();
+		GameObject particle = new GameObject();
 		particle.attachBehavior(new PositionBehavior(new Position(x, y)));
 		particle.attachBehavior(new DrawSpriteBehavior(spriteProvider));		
 		particle.attachBehavior(new TimerBehavior(17) {
 			@Override
 			protected void onExpire() {
-				region.removeGameObject(particle);
+				region.getGameObjects().remove(particle);
 			}
 		});
+		region.getGameObjects().add(particle);
 		
 		MutablePosition mutablePosition = particle.getBehavior(PositionBehavior.class).getMutablePosition();
 		mutablePosition.setX(x);

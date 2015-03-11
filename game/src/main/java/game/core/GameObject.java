@@ -16,30 +16,9 @@ import org.lwjgl.opengl.GL11;
 public class GameObject {
 
 	/**
-	 * the region
-	 */
-	private final Region region;
-
-	/**
 	 * the behaviors
 	 */
 	private final Map<String, Behavior> behaviors = new HashMap<>();
-
-	/**
-	 * Constructor.
-	 * @param region the region that owns this object
-	 */
-	GameObject(Region region) {
-		this.region = region;
-	}
-	
-	/**
-	 * Getter method for the region.
-	 * @return the region
-	 */
-	public Region getRegion() {
-		return region;
-	}
 
 	/**
 	 * Attaches a behavior to this object. Throws an exception if another behavior with

@@ -24,34 +24,8 @@ public class Region {
 	 * Getter method for the gameObjects.
 	 * @return the gameObjects
 	 */
-	public Iterable<GameObject> getGameObjects() {
+	public List<GameObject> getGameObjects() {
 		return gameObjects;
-	}
-	
-	/**
-	 * Creates a new game object in this region.
-	 * 
-	 * TODO: I don't like this function. I don't like that game objects
-	 * must know their region at all. This was intended so the player's
-	 * block map behavior can spawn "bouncing coin" effects. But this doesn't
-	 * work at all. And even then, it would be better to give the player
-	 * an EffectSpawner that knows the region instead of making each
-	 * game object know its region.
-	 * 
-	 * @return the game object
-	 */
-	public GameObject createGameObject() {
-		GameObject gameObject = new GameObject(this);
-		gameObjects.add(gameObject);
-		return gameObject;
-	}
-	
-	/**
-	 * Removes a game object from this region.
-	 * @param gameObject the game object
-	 */
-	public void removeGameObject(GameObject gameObject) {
-		gameObjects.remove(gameObject);
 	}
 	
 	/**
