@@ -7,7 +7,6 @@
 package game.martin;
 
 import game.core.GameObject;
-import game.core.Region;
 import game.core.blockmap.AbstractForeachBlockBehaviour;
 import game.core.blockmap.BlockMapBehavior;
 import game.core.blockmap.BlockMapEditor;
@@ -19,11 +18,11 @@ import game.core.gfx.DrawSpriteBehavior;
 import game.core.gfx.LeftRightSpriteProvider;
 import game.core.gfx.Sprite;
 import game.core.gfx.SpriteProvider;
-import game.core.misc.TimerBehavior;
 import game.core.movement.AbstractBlockMapJumpAndRunBehavior;
 import game.core.movement.LeftRightOrientationBehavior;
 import game.core.movement.PositionBehavior;
-import game.core.movement.UnblockedGravityBehavior;
+import game.core.particle.GameObjectParticleSpawner;
+import game.core.particle.ParticleSpawner;
 import game.engine.gfx.Texture;
 import game.engine.resource.Resources;
 import game.engine.system.EngineLauncher;
@@ -37,6 +36,11 @@ public class Main {
 	 * the coinSprite
 	 */
 	private static Sprite coinSprite;
+	
+	/**
+	 * the particleSpawner
+	 */
+	private static ParticleSpawner particleSpawner;
 
 	/**
 	 * The main method.
@@ -52,6 +56,7 @@ public class Main {
 		Sprite playerRight = new Sprite(Resources.getTexture("sprites/player-right.png"), 0.7f, 0.7f, 0.7f, 0.7f);
 		SpriteProvider playerSpriteProvider = new LeftRightSpriteProvider(playerLeft, playerRight);
 		coinSprite = new Sprite(Resources.getTexture("sprites/coin.png"), 0.5f, 0.5f, 0.5f, 0.5f);
+		particleSpawner = new GameObjectParticleSpawner(launcher.getInitialRegion());
 
 		TextureProvider blockMapTextureProvider = new TextureProvider() {
 			@Override
@@ -85,13 +90,12 @@ public class Main {
 		BlockMapBehavior blockMapBehavior = new BlockMapBehavior(30, 30);
 		blockMapBehavior.setTextureProvider(blockMapTextureProvider);
 		drawMap(new BlockMapEditor(blockMapBehavior));
-		GameObject blockMap = new GameObject();
+		GameObject blockMap = launcher.getInitialRegion().createGameObject();
 		blockMap.attachBehavior(blockMapBehavior);
-		launcher.getInitialRegion().getGameObjects().add(blockMap);
 
-		IsolatedBlockHandler<Boolean> solidity = new Solidity(launcher.getInitialRegion());
+		IsolatedBlockHandler<Boolean> solidity = new Solidity();
 		BlockMapProbe blockMapProbe = new BlockMapProbe(blockMapBehavior, 0.4f, 0.4f, 0.5f, 0.55f);
-		GameObject testObject = new GameObject();
+		GameObject testObject = launcher.getInitialRegion().createGameObject();
 		testObject.attachBehavior(new PositionBehavior(new Position(1.0f, 1.0f)));
 		testObject.attachBehavior(new LeftRightOrientationBehavior());
 		testObject.attachBehavior(new DrawSpriteBehavior(playerSpriteProvider));
@@ -111,7 +115,6 @@ public class Main {
 				return null;
 			}
 		});
-		launcher.getInitialRegion().getGameObjects().add(testObject);
 
 		launcher.loop(20);
 		launcher.cleanup();
@@ -139,19 +142,6 @@ public class Main {
 	 */
 	private static class Solidity implements IsolatedBlockHandler<Boolean> {
 
-		/**
-		 * the region
-		 */
-		private final Region region;
-
-		/**
-		 * Constructor.
-		 * @param region the region
-		 */
-		public Solidity(Region region) {
-			this.region = region;
-		}
-
 		/* (non-Javadoc)
 		 * @see game.core.blockmap.BlockMapProbe.IsolatedBlockHandler#handle(game.core.blockmap.BlockMapBehavior, int, int, int)
 		 */
@@ -166,27 +156,11 @@ public class Main {
 			if (block == 4) {
 				map.setBlock(x, y, 5);
 				Resources.getSound("coin.wav").playAsSoundEffect(1.0f, 0.5f, false);
-				spawnCoinEffect(region, x, y);
+				particleSpawner.spawnParticle(x + 0.5f, y + 0.5f, 0, -1.0f, 0.1f, coinSprite);
 			}
 			return true;
 		}
 
 	};
-
-	private static void spawnCoinEffect(Region region, int x, int y) {
-		GameObject coin = new GameObject();
-		coin.attachBehavior(new PositionBehavior(new Position(x + 0.5f, y + 0.5f)));
-		coin.attachBehavior(new DrawSpriteBehavior(coinSprite));
-		UnblockedGravityBehavior gravity = new UnblockedGravityBehavior();
-		gravity.setVerticalSpeed(-1.0f);
-		coin.attachBehavior(gravity);
-		coin.attachBehavior(new TimerBehavior(17) {
-			@Override
-			protected void onExpire() {
-				region.getGameObjects().remove(coin);
-			}
-		});
-		region.getGameObjects().add(coin);
-	}
 
 }
