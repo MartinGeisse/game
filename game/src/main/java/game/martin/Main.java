@@ -57,8 +57,8 @@ public class Main {
 		GameLauncher launcher = new GameLauncher(args);
 		launcher.launch();
 
-		Sprite playerLeft = new Sprite(Resources.getTexture("sprites/player-left.png"), 0.7f, 0.7f, 0.7f, 0.7f);
-		Sprite playerRight = new Sprite(Resources.getTexture("sprites/player-right.png"), 0.7f, 0.7f, 0.7f, 0.7f);
+		Sprite playerLeft = new Sprite(Resources.getTexture("sprites/player-left.png"), 0.6f, 0.6f, 0.6f, 0.6f);
+		Sprite playerRight = new Sprite(Resources.getTexture("sprites/player-right.png"), 0.6f, 0.6f, 0.6f, 0.6f);
 		SpriteProvider playerSpriteProvider = new LeftRightSpriteProvider(playerLeft, playerRight);
 		coinSprite = new Sprite(Resources.getTexture("sprites/coin.png"), 0.5f, 0.5f, 0.5f, 0.5f);
 		sparkSprite = new Sprite(Resources.getTexture("sprites/spark.png"), 0.2f, 0.2f, 0.2f, 0.2f);
@@ -101,7 +101,7 @@ public class Main {
 		launcher.getInitialRegion().getGameObjects().add(blockMap);
 
 		IsolatedBlockHandler<Boolean> solidity = new Solidity();
-		BlockMapProbe blockMapProbe = new BlockMapProbe(blockMapBehavior, 0.4f, 0.4f, 0.5f, 0.55f);
+		BlockMapProbe blockMapProbe = new BlockMapProbe(blockMapBehavior, 0.35f, 0.35f, 0.4f, 0.45f);
 		GameObject player = new GameObject();
 		player.attachBehavior(new PositionBehavior(new Position(1.0f, 1.0f)));
 		player.attachBehavior(new LeftRightOrientationBehavior());
@@ -124,6 +124,7 @@ public class Main {
 		});
 		player.attachBehavior(new ScreenFollowBehavior(launcher.getGame()));
 		launcher.getInitialRegion().getGameObjects().add(player);
+		launcher.getGame().setZoom(1.2f);
 
 		launcher.loop(20);
 		launcher.cleanup();
@@ -136,8 +137,10 @@ public class Main {
 	 */
 	private static void drawMap(BlockMapEditor map) {
 		map.withBlock(1).hline(0, 15, 100);
-		map.withBlock(2).hline(0, 16, 100);
+		map.withBlock(2).fillRect(0, 16, 100, 14);
 		map.withBlock(2).vline(10, 13, 4);
+		map.withBlock(0).vline(20, 15, 2);
+		map.withBlock(1).setBlock(20, 17);
 		map.withBlock(1).setBlock(10, 12);
 		map.withBlock(1).setBlock(5, 11);
 		map.withBlock(3).hline(15, 14, 5);

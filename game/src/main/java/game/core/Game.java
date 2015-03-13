@@ -58,6 +58,22 @@ public class Game {
 	}
 
 	/**
+	 * Getter method for the zoom.
+	 * @return the zoom
+	 */
+	public float getZoom() {
+		return zoom;
+	}
+
+	/**
+	 * Setter method for the zoom.
+	 * @param zoom the zoom to set
+	 */
+	public void setZoom(float zoom) {
+		this.zoom = zoom;
+	}
+
+	/**
 	 * Getter method for the screenX.
 	 * @return the screenX
 	 */
@@ -88,7 +104,7 @@ public class Game {
 	public void setScreenY(float screenY) {
 		this.screenY = screenY;
 	}
-	
+
 	/**
 	 * Getter method for the screen width, in units.
 	 * @return the screen width, in units
@@ -96,7 +112,7 @@ public class Game {
 	public float getScreenWidthUnits() {
 		return 30.0f * Display.getWidth() / Display.getHeight() / zoom;
 	}
-	
+
 	/**
 	 * Getter method for the screen height, in units.
 	 * @return the screen height, in units
