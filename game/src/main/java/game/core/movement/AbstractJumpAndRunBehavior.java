@@ -30,6 +30,11 @@ public abstract class AbstractJumpAndRunBehavior extends AbstractBehavior {
 	private static final float MAX_VERTICAL_SPEED = 0.8f;
 
 	/**
+	 * the running
+	 */
+	private boolean running = false;
+	
+	/**
 	 * the verticalSpeed
 	 */
 	private float verticalSpeed = 0;
@@ -49,6 +54,14 @@ public abstract class AbstractJumpAndRunBehavior extends AbstractBehavior {
 	public void setVerticalSpeed(float verticalSpeed) {
 		this.verticalSpeed = verticalSpeed;
 	}
+	
+	/**
+	 * Getter method for the running.
+	 * @return the running
+	 */
+	public boolean isRunning() {
+		return running;
+	}
 
 	/* (non-Javadoc)
 	 * @see game.core.AbstractBehavior#handleStep(game.core.GameObject)
@@ -57,6 +70,7 @@ public abstract class AbstractJumpAndRunBehavior extends AbstractBehavior {
 	public void handleStep(GameObject target) {
 
 		// horizontal movement
+		running = false;
 		handleHorizontalMovementKey(target, Keyboard.KEY_LEFT, -HORIZONTAL_SPEED, LeftRight.LEFT);
 		handleHorizontalMovementKey(target, Keyboard.KEY_RIGHT, HORIZONTAL_SPEED, LeftRight.RIGHT);
 
@@ -71,7 +85,6 @@ public abstract class AbstractJumpAndRunBehavior extends AbstractBehavior {
 		if (dy != verticalSpeed) {
 			boolean falling = (verticalSpeed >= 0);
 			verticalSpeed = 0;
-			// TODO only if blocked by floor, not ceiling
 			if (falling && Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
 				verticalSpeed = -0.7f;
 			}
@@ -84,6 +97,7 @@ public abstract class AbstractJumpAndRunBehavior extends AbstractBehavior {
 	 */
 	private void handleHorizontalMovementKey(GameObject target, int key, float dx, LeftRight leftRight) {
 		if (Keyboard.isKeyDown(key)) {
+			running = true;
 			dx = adjustHorizontalMovement(target, dx);
 			MutablePosition mutablePosition = target.getBehavior(PositionBehavior.class).getMutablePosition();
 			mutablePosition.setX(mutablePosition.getX() + dx);

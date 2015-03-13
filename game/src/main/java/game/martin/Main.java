@@ -6,6 +6,7 @@
 
 package game.martin;
 
+import game.core.AbstractBehavior;
 import game.core.GameObject;
 import game.core.blockmap.AbstractForeachBlockBehaviour;
 import game.core.blockmap.BlockMapBehavior;
@@ -15,6 +16,7 @@ import game.core.blockmap.BlockMapProbe.IsolatedBlockHandler;
 import game.core.blockmap.TextureProvider;
 import game.core.geometry.Position;
 import game.core.gfx.DrawSpriteBehavior;
+import game.core.gfx.FixedSizeAnimatedSprite;
 import game.core.gfx.LeftRightSpriteProvider;
 import game.core.gfx.Sprite;
 import game.core.gfx.SpriteProvider;
@@ -43,6 +45,16 @@ public class Main {
 	private static Sprite sparkSprite;
 
 	/**
+	 * the playerRunLeft
+	 */
+	private static FixedSizeAnimatedSprite playerRunLeft;
+	
+	/**
+	 * the playerRunRight
+	 */
+	private static FixedSizeAnimatedSprite playerRunRight;
+
+	/**
 	 * the particleSpawner
 	 */
 	private static GameObjectParticleSpawner particleSpawner;
@@ -59,7 +71,13 @@ public class Main {
 
 		Sprite playerLeft = new Sprite(Resources.getTexture("sprites/player-left.png"), 0.6f, 0.6f, 0.6f, 0.6f);
 		Sprite playerRight = new Sprite(Resources.getTexture("sprites/player-right.png"), 0.6f, 0.6f, 0.6f, 0.6f);
-		SpriteProvider playerSpriteProvider = new LeftRightSpriteProvider(playerLeft, playerRight);
+		SpriteProvider playerStandStillSpriteProvider = new LeftRightSpriteProvider(playerLeft, playerRight);
+		playerRunLeft = new FixedSizeAnimatedSprite("sprites/player-run-left-$.png", 0.6f, 0.6f, 0.6f, 0.6f, 4);
+		playerRunRight = new FixedSizeAnimatedSprite("sprites/player-run-right-$.png", 0.6f, 0.6f, 0.6f, 0.6f, 4);
+		SpriteProvider playerRunSpriteProvider = new LeftRightSpriteProvider(playerRunLeft, playerRunRight);
+		SpriteProvider playerSpriteProvider =
+			((player) -> player.getBehavior(PlayerJumpAndRunBehavior.class).isRunning() ? playerRunSpriteProvider.provideSprite(player) : playerStandStillSpriteProvider.provideSprite(player));
+
 		coinSprite = new Sprite(Resources.getTexture("sprites/coin.png"), 0.5f, 0.5f, 0.5f, 0.5f);
 		sparkSprite = new Sprite(Resources.getTexture("sprites/spark.png"), 0.2f, 0.2f, 0.2f, 0.2f);
 		particleSpawner = new GameObjectParticleSpawner(launcher.getInitialRegion());
@@ -106,12 +124,7 @@ public class Main {
 		player.attachBehavior(new PositionBehavior(new Position(1.0f, 1.0f)));
 		player.attachBehavior(new LeftRightOrientationBehavior());
 		player.attachBehavior(new DrawSpriteBehavior(playerSpriteProvider));
-		player.attachBehavior(new AbstractBlockMapJumpAndRunBehavior(blockMapProbe, solidity) {
-			@Override
-			protected float getGravity(GameObject target) {
-				return 0.04f;
-			}
-		});
+		player.attachBehavior(new PlayerJumpAndRunBehavior(blockMapProbe, solidity));
 		player.attachBehavior(new AbstractForeachBlockBehaviour(blockMapProbe) {
 			@Override
 			public Void handle(BlockMapBehavior blockMap, int x, int y, int blockValue) {
@@ -123,6 +136,13 @@ public class Main {
 			}
 		});
 		player.attachBehavior(new ScreenFollowBehavior(launcher.getGame()));
+		player.attachBehavior(new AbstractBehavior() {
+			@Override
+			public void handleStep(GameObject target) {
+				playerRunLeft.setCurrentGameFrame(playerRunLeft.getCurrentGameFrame() + 1);
+				playerRunRight.setCurrentGameFrame(playerRunRight.getCurrentGameFrame() + 1);
+			};
+		});
 		launcher.getInitialRegion().getGameObjects().add(player);
 		launcher.getGame().setZoom(1.2f);
 
@@ -168,12 +188,11 @@ public class Main {
 			if (block == 4) {
 				map.setBlock(x, y, 5);
 				Resources.getSound("coin.wav").playAsSoundEffect(1.0f, 0.5f, false);
-				particleSpawner.spawnParticle(x + 0.5f, y + 0.5f, 0, -1.0f, 0.1f, coinSprite,
-					17, position -> spawnSparks(position.getX(), position.getY()));
+				particleSpawner.spawnParticle(x + 0.5f, y + 0.5f, 0, -1.0f, 0.1f, coinSprite, 17, position -> spawnSparks(position.getX(), position.getY()));
 			}
 			return true;
 		}
-		
+
 		private void spawnSparks(float x, float y) {
 			float u = 0.3f, d = 0.21f;
 			spawnSpark(x, y, +u, 0);
@@ -192,4 +211,28 @@ public class Main {
 
 	};
 
+	/**
+	 *
+	 */
+	private static class PlayerJumpAndRunBehavior extends AbstractBlockMapJumpAndRunBehavior {
+
+		/**
+		 * Constructor.
+		 * @param blockMapProbe the block map probe
+		 * @param blockSolidity the solidity function
+		 */
+		public PlayerJumpAndRunBehavior(BlockMapProbe blockMapProbe, IsolatedBlockHandler<Boolean> blockSolidity) {
+			super(blockMapProbe, blockSolidity);
+
+		}
+
+		/* (non-Javadoc)
+		 * @see game.core.movement.AbstractJumpAndRunBehavior#getGravity(game.core.GameObject)
+		 */
+		@Override
+		protected float getGravity(GameObject target) {
+			return 0.04f;
+		}
+
+	}
 }
