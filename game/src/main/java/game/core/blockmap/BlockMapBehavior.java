@@ -139,8 +139,8 @@ public class BlockMapBehavior extends AbstractBehavior {
 		if (textureProvider == null) {
 			return;
 		}
-		int w = Math.min(width, 27);
-		int h = Math.min(height, 20);
+		int w = Math.min(width, 100);
+		int h = Math.min(height, 30);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glColor3ub((byte)255, (byte)255, (byte)255);
 		for (int x = 0; x < w; x++) {

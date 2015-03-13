@@ -4,20 +4,24 @@
 
 package game.core.particle;
 
+import game.core.Behavior;
 import game.core.GameObject;
 import game.core.Region;
 import game.core.geometry.MutablePosition;
 import game.core.geometry.Position;
+import game.core.geometry.ReadablePosition;
 import game.core.gfx.DrawSpriteBehavior;
 import game.core.gfx.SpriteProvider;
 import game.core.misc.TimerBehavior;
 import game.core.movement.PositionBehavior;
 import game.core.movement.UnblockedGravityBehavior;
 
+import java.util.function.Consumer;
+
 /**
  * Spawns particle effects by creating a new game object for each particle.
  */
-public class GameObjectParticleSpawner implements ParticleSpawner {
+public class GameObjectParticleSpawner  {
 
 	/**
 	 * the region
@@ -32,18 +36,29 @@ public class GameObjectParticleSpawner implements ParticleSpawner {
 		this.region = region;
 	}
 
-	/* (non-Javadoc)
-	 * @see game.core.particle.ParticleSpawner#spawnParticle(float, float, float, float, float, game.core.gfx.SpriteProvider)
+	/**
+	 * Spawns a particle.
+	 * 
+	 * @param x the initial x position
+	 * @param y the initial y position
+	 * @param dx the x velocity
+	 * @param dy the initial y velocity
+	 * @param gravity the gravity
+	 * @param spriteProvider the sprite provider
+	 * @param particleBehaviors additional behaviors
 	 */
-	@Override
-	public void spawnParticle(float x, float y, float dx, float dy, float gravity, SpriteProvider spriteProvider) {
+	public void spawnParticle(float x, float y, float dx, float dy, float gravity, SpriteProvider spriteProvider, int ttl, Consumer<ReadablePosition> disappearCallback, Behavior... particleBehaviors) {
 		GameObject particle = new GameObject();
 		particle.attachBehavior(new PositionBehavior(new Position(x, y)));
 		particle.attachBehavior(new DrawSpriteBehavior(spriteProvider));		
-		particle.attachBehavior(new TimerBehavior(17) {
+		particle.attachBehavior(new TimerBehavior(ttl) {
 			@Override
-			protected void onExpire() {
-				region.getGameObjects().remove(particle);
+			protected void onExpire(GameObject target) {
+				region.getGameObjects().remove(target);
+				if (disappearCallback != null) {
+					MutablePosition position = target.getBehavior(PositionBehavior.class).getMutablePosition();
+					disappearCallback.accept(position);
+				}
 			}
 		});
 		region.getGameObjects().add(particle);
@@ -57,7 +72,11 @@ public class GameObjectParticleSpawner implements ParticleSpawner {
 		movement.setDy(dy);
 		movement.setGravity(gravity);
 		particle.attachBehavior(movement);
+		
+		for (Behavior behavior : particleBehaviors) {
+			particle.attachBehavior(behavior);
+		}
 
 	}
-
+	
 }

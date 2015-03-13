@@ -32,7 +32,7 @@ public abstract class TimerBehavior extends AbstractBehavior {
 	public void handleStep(GameObject target) {
 		remainingFrames--;
 		if (remainingFrames <= 0) {
-			onExpire();
+			onExpire(target);
 			target.detachBehavior(this);
 		}
 	}
@@ -40,6 +40,6 @@ public abstract class TimerBehavior extends AbstractBehavior {
 	/**
 	 * Called when the timer expires.
 	 */
-	protected abstract void onExpire();
+	protected abstract void onExpire(GameObject target);
 	
 }

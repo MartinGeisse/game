@@ -21,11 +21,11 @@ import game.core.gfx.SpriteProvider;
 import game.core.movement.AbstractBlockMapJumpAndRunBehavior;
 import game.core.movement.LeftRightOrientationBehavior;
 import game.core.movement.PositionBehavior;
+import game.core.movement.ScreenFollowBehavior;
 import game.core.particle.GameObjectParticleSpawner;
-import game.core.particle.ParticleSpawner;
 import game.engine.gfx.Texture;
 import game.engine.resource.Resources;
-import game.engine.system.EngineLauncher;
+import game.engine.system.GameLauncher;
 
 /**
  * The main class.
@@ -36,11 +36,16 @@ public class Main {
 	 * the coinSprite
 	 */
 	private static Sprite coinSprite;
-	
+
+	/**
+	 * the sparkSprite
+	 */
+	private static Sprite sparkSprite;
+
 	/**
 	 * the particleSpawner
 	 */
-	private static ParticleSpawner particleSpawner;
+	private static GameObjectParticleSpawner particleSpawner;
 
 	/**
 	 * The main method.
@@ -49,13 +54,14 @@ public class Main {
 	 */
 	public static void main(String[] args) throws Exception {
 
-		EngineLauncher launcher = new EngineLauncher(args);
+		GameLauncher launcher = new GameLauncher(args);
 		launcher.launch();
 
 		Sprite playerLeft = new Sprite(Resources.getTexture("sprites/player-left.png"), 0.7f, 0.7f, 0.7f, 0.7f);
 		Sprite playerRight = new Sprite(Resources.getTexture("sprites/player-right.png"), 0.7f, 0.7f, 0.7f, 0.7f);
 		SpriteProvider playerSpriteProvider = new LeftRightSpriteProvider(playerLeft, playerRight);
 		coinSprite = new Sprite(Resources.getTexture("sprites/coin.png"), 0.5f, 0.5f, 0.5f, 0.5f);
+		sparkSprite = new Sprite(Resources.getTexture("sprites/spark.png"), 0.2f, 0.2f, 0.2f, 0.2f);
 		particleSpawner = new GameObjectParticleSpawner(launcher.getInitialRegion());
 
 		TextureProvider blockMapTextureProvider = new TextureProvider() {
@@ -87,7 +93,7 @@ public class Main {
 				}
 			}
 		};
-		BlockMapBehavior blockMapBehavior = new BlockMapBehavior(30, 30);
+		BlockMapBehavior blockMapBehavior = new BlockMapBehavior(100, 30);
 		blockMapBehavior.setTextureProvider(blockMapTextureProvider);
 		drawMap(new BlockMapEditor(blockMapBehavior));
 		GameObject blockMap = new GameObject();
@@ -116,6 +122,7 @@ public class Main {
 				return null;
 			}
 		});
+		player.attachBehavior(new ScreenFollowBehavior(launcher.getGame()));
 		launcher.getInitialRegion().getGameObjects().add(player);
 
 		launcher.loop(20);
@@ -128,8 +135,8 @@ public class Main {
 	 * 
 	 */
 	private static void drawMap(BlockMapEditor map) {
-		map.withBlock(1).hline(0, 15, 20);
-		map.withBlock(2).hline(0, 16, 20);
+		map.withBlock(1).hline(0, 15, 100);
+		map.withBlock(2).hline(0, 16, 100);
 		map.withBlock(2).vline(10, 13, 4);
 		map.withBlock(1).setBlock(10, 12);
 		map.withBlock(1).setBlock(5, 11);
@@ -158,9 +165,26 @@ public class Main {
 			if (block == 4) {
 				map.setBlock(x, y, 5);
 				Resources.getSound("coin.wav").playAsSoundEffect(1.0f, 0.5f, false);
-				particleSpawner.spawnParticle(x + 0.5f, y + 0.5f, 0, -1.0f, 0.1f, coinSprite);
+				particleSpawner.spawnParticle(x + 0.5f, y + 0.5f, 0, -1.0f, 0.1f, coinSprite,
+					17, position -> spawnSparks(position.getX(), position.getY()));
 			}
 			return true;
+		}
+		
+		private void spawnSparks(float x, float y) {
+			float u = 0.3f, d = 0.21f;
+			spawnSpark(x, y, +u, 0);
+			spawnSpark(x, y, +d, +d);
+			spawnSpark(x, y, +0, +u);
+			spawnSpark(x, y, -d, +d);
+			spawnSpark(x, y, -u, 0);
+			spawnSpark(x, y, -d, -d);
+			spawnSpark(x, y, +0, -u);
+			spawnSpark(x, y, +d, -d);
+		}
+
+		private void spawnSpark(float x, float y, float dx, float dy) {
+			particleSpawner.spawnParticle(x, y, dx, dy, 0, sparkSprite, 4, null);
 		}
 
 	};

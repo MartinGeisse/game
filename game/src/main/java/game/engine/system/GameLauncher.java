@@ -23,19 +23,19 @@ import org.lwjgl.opengl.PixelFormat;
 
 /**
  * This class prepares the system for running the game and is used to construct
- * the engine object and the game logic objects.
+ * the game object and the game logic objects.
  */
-public class EngineLauncher {
+public class GameLauncher {
 
 	/**
 	 * the logger
 	 */
-	private static Logger logger = Logger.getLogger(EngineLauncher.class);
+	private static Logger logger = Logger.getLogger(GameLauncher.class);
 
 	/**
-	 * the engine
+	 * the game
 	 */
-	private final Game engine;
+	private final Game game;
 	
 	/**
 	 * the frameLoop
@@ -61,9 +61,9 @@ public class EngineLauncher {
 	 * Constructor.
 	 * @param args command-line arguments
 	 */
-	public EngineLauncher(String[] args) {
-		engine = new Game();
-		engine.setCurrentRegion(new Region());
+	public GameLauncher(String[] args) {
+		game = new Game();
+		game.setCurrentRegion(new Region());
 		frameLoop = new FrameLoop();
 
 		// parse command-line options
@@ -78,11 +78,11 @@ public class EngineLauncher {
 	}
 
 	/**
-	 * Getter method for the engine.
-	 * @return the engine
+	 * Getter method for the game.
+	 * @return the game
 	 */
-	public Game getEngine() {
-		return engine;
+	public Game getGame() {
+		return game;
 	}
 
 	/**
@@ -90,7 +90,7 @@ public class EngineLauncher {
 	 * @return the initial region
 	 */
 	public Region getInitialRegion() {
-		return engine.getCurrentRegion();
+		return game.getCurrentRegion();
 	}
 
 	/**
@@ -98,7 +98,7 @@ public class EngineLauncher {
 	 * @param initialRegion the initialRegion to set
 	 */
 	public void setInitialRegion(Region initialRegion) {
-		engine.setCurrentRegion(initialRegion);
+		game.setCurrentRegion(initialRegion);
 	}
 
 	/**
@@ -150,12 +150,12 @@ public class EngineLauncher {
 	}
 
 	/**
-	 * Launches the engine.
+	 * Launches the game.
 	 * 
 	 * @throws Exception on errors during initialization
 	 */
 	public void launch() throws Exception {
-		logger.info("EngineLauncher.launch() started");
+		logger.info("GameLauncher.launch() started");
 
 		// include LWJGL native libraries
 		LwjglNativeLibraryHelper.prepareNativeLibraries();
@@ -201,7 +201,7 @@ public class EngineLauncher {
 
 		// build the frame loop
 		HandlerList handlers = new HandlerList();
-		handlers.add(new GameFrameHandler(engine));
+		handlers.add(new GameFrameHandler(game));
 		handlers.add(new ExitHandler(true, Keyboard.KEY_ESCAPE));
 		frameLoop.getRootHandler().setWrappedHandler(handlers);
 
