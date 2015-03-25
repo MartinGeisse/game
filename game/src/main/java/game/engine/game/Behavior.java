@@ -5,7 +5,6 @@
 package game.engine.game;
 
 import jdk.nashorn.api.scripting.JSObject;
-import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
 /**
  * A behavior that can be applied to a game object.
@@ -40,16 +39,8 @@ public class Behavior {
 	 * Applies this behavior to the specified game object.
 	 * @param target the target game object
 	 */
-	public void apply(GameObject target, ScriptObjectMirror parameters) {
+	public void apply(GameObject target, Object parameters) {
 		applicator.apply(this, target, parameters);
-	}
-	
-	/**
-	 * Applies this behavior to the specified game object.
-	 * @param target the target game object
-	 */
-	public void applyNative(GameObject target, Object parameters) {
-		applicator.applyNative(this, target, parameters);
 	}
 
 	/**
@@ -64,16 +55,7 @@ public class Behavior {
 		 * @param target the target game object
 		 * @param parameters the parameters object
 		 */
-		public void apply(Behavior behavior, GameObject target, ScriptObjectMirror parameters);
-
-		/**
-		 * Applies the behavior to the specified game object.
-		 * 
-		 * @param behavior the behavior to apply
-		 * @param target the target game object
-		 * @param parameters the parameters object
-		 */
-		public void applyNative(Behavior behavior, GameObject target, Object parameters);
+		public void apply(Behavior behavior, GameObject target, Object parameters);
 
 	}
 
@@ -96,18 +78,10 @@ public class Behavior {
 		}
 
 		/* (non-Javadoc)
-		 * @see game.engine.game.Behavior.Applicator#apply(game.engine.game.Behavior, game.engine.game.GameObject, jdk.nashorn.api.scripting.ScriptObjectMirror)
+		 * @see game.engine.game.Behavior.Applicator#apply(game.engine.game.Behavior, game.engine.game.GameObject, java.lang.Object)
 		 */
 		@Override
-		public void apply(Behavior behavior, GameObject target, ScriptObjectMirror parameters) {
-			function.call(behavior, target, parameters);
-		}
-		
-		/* (non-Javadoc)
-		 * @see game.engine.game.Behavior.Applicator#applyNative(game.engine.game.Behavior, game.engine.game.GameObject, java.lang.Object)
-		 */
-		@Override
-		public void applyNative(Behavior behavior, GameObject target, Object parameters) {
+		public void apply(Behavior behavior, GameObject target, Object parameters) {
 			function.call(behavior, target, parameters);
 		}
 

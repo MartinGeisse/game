@@ -5,7 +5,6 @@
 package game.engine.game;
 
 import jdk.nashorn.api.scripting.JSObject;
-import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
 /**
  * Implements an event listener written as a Javascript function.
@@ -31,10 +30,10 @@ public final class ScriptedEventListener extends EventListener {
 	}
 
 	/* (non-Javadoc)
-	 * @see game.engine.game.EventListener#handleEvent(game.engine.game.GameObject, jdk.nashorn.api.scripting.ScriptObjectMirror)
+	 * @see game.engine.game.EventListener#handleEvent(game.engine.game.GameObject, jdk.nashorn.api.scripting.Object)
 	 */
 	@Override
-	public void handleEvent(GameObject gameObject, ScriptObjectMirror payload) {
+	public void handleEvent(GameObject gameObject, Object payload) {
 		function.call(null, gameObject, payload);
 	}
 

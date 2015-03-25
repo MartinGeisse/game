@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 import jdk.nashorn.api.scripting.JSObject;
-import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
 import org.lwjgl.opengl.GL11;
 
@@ -35,7 +34,7 @@ public class GameObject {
 	 * @param key the key behavior
 	 * @return the value
 	 */
-	public ScriptObjectMirror get(Behavior key) {
+	public Object get(Behavior key) {
 		return data.get(key);
 	}
 	
@@ -45,7 +44,7 @@ public class GameObject {
 	 * @param key the key behavior
 	 * @param value the value to set
 	 */
-	public void set(Behavior key, ScriptObjectMirror value) {
+	public void set(Behavior key, Object value) {
 		data.put(key, value);
 	}
 	
@@ -83,7 +82,7 @@ public class GameObject {
 	 * @param event the event name
 	 * @param payload the payload
 	 */
-	public void emit(String event, ScriptObjectMirror payload) {
+	public void emit(String event, Object payload) {
 		emit(null, event, payload);
 	}
 
@@ -95,7 +94,7 @@ public class GameObject {
 	 * @param name the event name
 	 * @param payload the payload
 	 */
-	public void emit(Behavior behavior, String name, ScriptObjectMirror payload) {
+	public void emit(Behavior behavior, String name, Object payload) {
 		// TODO pass a GameTickProcessor that can copy the arrays into a
 		// re-used "clone" array without creating new objects
 		for (EventListener listener : eventListeners) {

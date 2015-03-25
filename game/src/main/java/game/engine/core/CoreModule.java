@@ -12,7 +12,6 @@ import game.engine.game.GameObject;
 import javax.script.ScriptEngine;
 
 import jdk.nashorn.api.scripting.JSObject;
-import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
 import org.lwjgl.opengl.GL11;
 
@@ -41,7 +40,7 @@ public final class CoreModule {
 
 			final EventListener positionTransformListener = new EventListener(null, "beforeDraw") {
 				@Override
-				public void handleEvent(GameObject gameObject, ScriptObjectMirror payload) {
+				public void handleEvent(GameObject gameObject, Object payload) {
 					PositionData data = (PositionData)gameObject.get(CoreModule.this.position);
 					GL11.glTranslatef(data.x, data.y, 0.0f);
 				}
@@ -49,9 +48,10 @@ public final class CoreModule {
 
 			position = new Behavior(new Applicator() {
 				@Override
-				public void apply(Behavior behavior, GameObject target, ScriptObjectMirror parameters) {
+				public void apply(Behavior behavior, GameObject target, Object rawParameters) {
 					PositionData data = new PositionData();
-					if (parameters != null) {
+					if (rawParameters != null) {
+						JSObject parameters = (JSObject)jdk.nashorn.api.scripting.ScriptUtils.wrap(rawParameters);
 						if (parameters.getMember("x") instanceof Number) {
 							data.x = ((Number)parameters.getMember("x")).floatValue();
 						}
@@ -67,7 +67,7 @@ public final class CoreModule {
 
 			final EventListener drawRectangleListener = new EventListener(null, "draw") {
 				@Override
-				public void handleEvent(GameObject gameObject, ScriptObjectMirror payload) {
+				public void handleEvent(GameObject gameObject, Object payload) {
 					GL11.glColor4ub((byte)255, (byte)255, (byte)255, (byte)255);
 					GL11.glBegin(GL11.GL_QUADS);
 					GL11.glVertex2f(1.0f, 1.0f);
@@ -80,7 +80,7 @@ public final class CoreModule {
 
 			rectangle = new Behavior(new Applicator() {
 				@Override
-				public void apply(Behavior behavior, GameObject target, ScriptObjectMirror parameters) {
+				public void apply(Behavior behavior, GameObject target, Object parameters) {
 					target.addListener(drawRectangleListener);
 				}
 			});
