@@ -1,0 +1,60 @@
+
+In Java würde man Behaviors kombinieren. Was macht man in JS? Kombiniert man
+Objekte? Ruft man mehrere Funktionen auf und übergibt jeweils ein Game
+Object als Parameter?
+
+Funktionen aufrufen klingt generell gut, aber dann verlagert sich das
+Problem trotzdem nur in diese Funktionen hinein. Es läuft hinaus auf:
+- Effekte in anderen Objekten triggern. Das geht in Node.js über die Events
+    ganz gut, wobei es dann auch ggf. zu Namens-Kollisionen kommen kann.
+- andere Objekte holen, um deren Properties abzurufen
+    - wenn man andererseits dieses Problem löst, dann ist auch das Event-Problem
+        gelöst, da diese dann als Event-Center fungieren können (das kann dann
+        auch optimiert werden)
+- das ganze entspricht einem mixin-problem
+- Gefühlt würde man listeners und ggf. Datenobjekte registrieren:
+
+    var game = require('game/game.js');
+    var core = reguire('game/core.js');
+
+    var myRegion = game.newRegion();
+    var gameObject = myRegion.newObject();
+    core.position.apply(gameObject);
+    core.gravity.apply(gameObject);
+    game.setRegion(myRegion);
+
+    // --- other files ---
+
+    core.position = game.newBehavior(function(o) {
+        // "this" refers to the behavior, which is also stored in (core.position)
+        o.set(this, {x: 0, y: 0});
+    });
+
+
+    core.gravity = game.newBehavior(function(o) {
+        o.set(this, 1);
+        o.on('frame', function(o) {
+            // o is being passed to callbacks so the callback can be shared
+            // note that core.gravity cannot be abbreviated as "this" because
+            // that context is lost. There might be a fix using this.on(),
+            // but that is actually meant for event scoping, not for providing
+            // a "this" context.
+            // -
+            // Node.js always uses the event emitter for "this".
+            // -
+            // Better: o.on('frame', function() {...}, this);
+            // But then, just using core.gravity seems fine.
+            o.get(core.position).y += o.get(core.gravity);
+        });
+    });
+
+    // gravity with shared callback
+    (function() {
+        function gravityCallback(o) {
+            o.get(core.position).y += o.get(core.gravity);
+        }
+        core.gravity = game.newBehavior(function(o) {
+            o.set(this, 1);
+            o.on('frame', gravityCallback);
+        });
+    })();
