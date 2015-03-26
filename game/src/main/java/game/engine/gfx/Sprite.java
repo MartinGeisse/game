@@ -2,12 +2,11 @@
  * Copyright (c) 2013 Shopgate GmbH
  */
 
-package game.core.gfx;
+package game.engine.gfx;
+
+import game.engine.game.GameObject;
 
 import org.lwjgl.opengl.GL11;
-
-import game.core.GameObject;
-import game.engine.gfx.Texture;
 
 /**
  * Contains the information for a textured quad that represents

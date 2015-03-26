@@ -1,5 +1,6 @@
 
 var keyboard = Java.type("org.lwjgl.input.Keyboard");
+var resources = Java.type("game.engine.resource.Resources");
 
 var moveByArrowKeys = game.newBehavior(function() {
 	this.on('tick', function() {
@@ -36,3 +37,4 @@ core.position.apply(o, {x: 5});
 moveByArrowKeys.apply(o);
 core.rectangle.apply(o);
 core.leftRight.apply(o);
+core.sprite.apply(o, new (Java.type('game.engine.gfx.Sprite'))(resources.getTexture("sprites/player-left.png"), 0.6, 0.6, 0.6, 0.6));

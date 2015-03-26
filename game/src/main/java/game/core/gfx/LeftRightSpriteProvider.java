@@ -7,6 +7,8 @@ package game.core.gfx;
 import game.core.GameObject;
 import game.core.LeftRight;
 import game.core.movement.LeftRightOrientationBehavior;
+import game.engine.gfx.Sprite;
+import game.engine.gfx.SpriteProvider;
 
 /**
  * A sprite provider that delegates to either one of two providers

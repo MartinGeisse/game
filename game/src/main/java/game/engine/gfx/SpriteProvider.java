@@ -2,9 +2,9 @@
  * Copyright (c) 2013 Shopgate GmbH
  */
 
-package game.core.gfx;
+package game.engine.gfx;
 
-import game.core.GameObject;
+import game.engine.game.GameObject;
 
 /**
  * Provides a sprite for a game object. 

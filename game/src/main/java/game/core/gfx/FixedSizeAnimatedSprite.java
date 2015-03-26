@@ -5,6 +5,8 @@
 package game.core.gfx;
 
 import game.core.GameObject;
+import game.engine.gfx.Sprite;
+import game.engine.gfx.SpriteProvider;
 import game.engine.gfx.Texture;
 import game.engine.resource.Resources;
 

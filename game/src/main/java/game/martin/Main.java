@@ -14,6 +14,9 @@ import game.engine.game.FrameHandler;
 import game.engine.game.Game;
 import game.engine.game.JavascriptConsole;
 import game.engine.game.Launcher;
+import game.engine.resource.DefaultResouceLoader;
+import game.engine.resource.DefaultResourceManager;
+import game.engine.resource.Resources;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -36,12 +39,15 @@ public class Main {
 	 * @throws Exception on errors
 	 */
 	public static void main(String[] args) throws Exception {
+		Launcher launcher = new Launcher(args);
+		launcher.startup();
 		
 		// prepare scripting engine
 		ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
 		ScriptEngine scriptEngine = scriptEngineManager.getEngineByName("nashorn");
 		
 		// apply standard definitions
+		Resources.setResourceManager(new DefaultResourceManager(new DefaultResouceLoader()));
 		Game gameEngine = new Game();
 		scriptEngine.put("console", new JavascriptConsole());
 		scriptEngine.put("game", gameEngine);
@@ -62,12 +68,10 @@ public class Main {
 		frameLoop.getRootHandler().setWrappedHandler(handlers);
 		
 		// run the actual game
-		Launcher launcher = new Launcher(args);
-		launcher.startup();
 		frameLoop.executeLoop(20);
 		launcher.shutdown();
-
 		System.exit(0);
+		
 	}
 
 }

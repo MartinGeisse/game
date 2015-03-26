@@ -8,6 +8,8 @@ import game.engine.game.Behavior;
 import game.engine.game.Behavior.Applicator;
 import game.engine.game.EventListener;
 import game.engine.game.GameObject;
+import game.engine.gfx.Sprite;
+import game.engine.gfx.SpriteProvider;
 
 import javax.script.ScriptEngine;
 
@@ -34,6 +36,11 @@ public final class CoreModule {
 	 * the leftRight
 	 */
 	public final Behavior leftRight;
+
+	/**
+	 * the sprite
+	 */
+	public final Behavior sprite;
 
 	/**
 	 * Constructor.
@@ -95,6 +102,31 @@ public final class CoreModule {
 					target.set(leftRight, "left");
 				}
 			});
+			
+			final EventListener drawSpriteListener = new EventListener(null, "draw") {
+				@Override
+				public void handleEvent(GameObject gameObject, Object payload) {
+					SpriteProvider spriteProvider = (SpriteProvider)gameObject.get(sprite);
+					if (spriteProvider != null) {
+						Sprite sprite = spriteProvider.provideSprite(gameObject);
+						if (sprite != null) {
+							sprite.draw();
+						}
+					}
+				}
+			};
+			
+			sprite = new Behavior(new Applicator() {
+				@Override
+				public void apply(GameObject target, Object parameters, Behavior behavior) {
+					if (parameters instanceof SpriteProvider) {
+						target.set(sprite, parameters);
+					} else {
+						throw new RuntimeException("invalid sprite provider");
+					}
+					target.addListener(drawSpriteListener);
+				}
+			}); 
 
 		} catch (Exception e) {
 			throw new RuntimeException(e);

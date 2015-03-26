@@ -11,10 +11,10 @@ import game.core.geometry.MutablePosition;
 import game.core.geometry.Position;
 import game.core.geometry.ReadablePosition;
 import game.core.gfx.DrawSpriteBehavior;
-import game.core.gfx.SpriteProvider;
 import game.core.misc.TimerBehavior;
 import game.core.movement.PositionBehavior;
 import game.core.movement.UnblockedGravityBehavior;
+import game.engine.gfx.SpriteProvider;
 
 import java.util.function.Consumer;
 
