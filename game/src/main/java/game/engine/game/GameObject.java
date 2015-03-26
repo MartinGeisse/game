@@ -53,6 +53,15 @@ public class GameObject {
 	 * @param name the event name
 	 * @param function the event handler function
 	 */
+	public void on(String name, JSObject function) {
+		addListener(null, name, function);
+	}
+	
+	/**
+	 * Adds an event listener.
+	 * @param name the event name
+	 * @param function the event handler function
+	 */
 	public void addListener(String name, JSObject function) {
 		addListener(null, name, function);
 	}
@@ -63,10 +72,28 @@ public class GameObject {
 	 * @param name the event name
 	 * @param function the event handler function
 	 */
+	public void on(Behavior behavior, String name, JSObject function) {
+		addListener(new ScriptedEventListener(behavior, name, function));
+	}
+	
+	/**
+	 * Adds an event listener.
+	 * @param behavior the event behavior
+	 * @param name the event name
+	 * @param function the event handler function
+	 */
 	public void addListener(Behavior behavior, String name, JSObject function) {
 		addListener(new ScriptedEventListener(behavior, name, function));
 	}
 
+	/**
+	 * Adds an event listener.
+	 * @param listener the listener to add
+	 */
+	public void on(EventListener listener) {
+		addListener(listener);
+	}
+	
 	/**
 	 * Adds an event listener.
 	 * @param listener the listener to add

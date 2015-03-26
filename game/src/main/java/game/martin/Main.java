@@ -12,6 +12,7 @@ import game.engine.frame.handlers.ExitHandler;
 import game.engine.frame.handlers.HandlerList;
 import game.engine.game.FrameHandler;
 import game.engine.game.Game;
+import game.engine.game.JavascriptConsole;
 import game.engine.game.Launcher;
 
 import java.io.File;
@@ -42,6 +43,7 @@ public class Main {
 		
 		// apply standard definitions
 		Game gameEngine = new Game();
+		scriptEngine.put("console", new JavascriptConsole());
 		scriptEngine.put("game", gameEngine);
 		scriptEngine.put("core", new CoreModule(scriptEngine));
 		

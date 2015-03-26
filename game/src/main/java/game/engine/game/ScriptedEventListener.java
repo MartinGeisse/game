@@ -34,7 +34,7 @@ public final class ScriptedEventListener extends EventListener {
 	 */
 	@Override
 	public void handleEvent(GameObject gameObject, Object payload) {
-		function.call(null, gameObject, payload);
+		function.call(gameObject, payload);
 	}
 
 }
