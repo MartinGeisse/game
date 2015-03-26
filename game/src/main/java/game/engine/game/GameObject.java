@@ -125,7 +125,7 @@ public class GameObject {
 		// TODO pass a GameTickProcessor that can copy the arrays into a
 		// re-used "clone" array without creating new objects
 		for (EventListener listener : eventListeners) {
-			listener.handleEvent(this, behavior, name, payload);
+			listener.handleEvent(behavior, name, this, payload);
 		}
 	}
 

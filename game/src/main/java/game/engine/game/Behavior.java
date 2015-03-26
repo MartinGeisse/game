@@ -40,7 +40,7 @@ public class Behavior {
 	 * @param target the target game object
 	 */
 	public void apply(GameObject target, Object parameters) {
-		applicator.apply(this, target, parameters);
+		applicator.apply(target, parameters, this);
 	}
 
 	/**
@@ -51,11 +51,11 @@ public class Behavior {
 		/**
 		 * Applies the behavior to the specified game object.
 		 * 
-		 * @param behavior the behavior to apply
 		 * @param target the target game object
 		 * @param parameters the parameters object
+		 * @param behavior the behavior to apply
 		 */
-		public void apply(Behavior behavior, GameObject target, Object parameters);
+		public void apply(GameObject target, Object parameters, Behavior behavior);
 
 	}
 
@@ -78,11 +78,11 @@ public class Behavior {
 		}
 
 		/* (non-Javadoc)
-		 * @see game.engine.game.Behavior.Applicator#apply(game.engine.game.Behavior, game.engine.game.GameObject, java.lang.Object)
+		 * @see game.engine.game.Behavior.Applicator#apply(game.engine.game.GameObject, java.lang.Object, game.engine.game.Behavior)
 		 */
 		@Override
-		public void apply(Behavior behavior, GameObject target, Object parameters) {
-			function.call(behavior, target, parameters);
+		public void apply(GameObject target, Object parameters, Behavior behavior) {
+			function.call(target, parameters, behavior);
 		}
 
 	}

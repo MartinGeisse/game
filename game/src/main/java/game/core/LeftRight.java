@@ -2,7 +2,7 @@
  * Copyright (c) 2013 Shopgate GmbH
  */
 
-package game.core.geometry;
+package game.core;
 
 /**
  * A simple left/right orientation.

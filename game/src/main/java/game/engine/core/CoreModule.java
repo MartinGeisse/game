@@ -31,6 +31,11 @@ public final class CoreModule {
 	public final Behavior rectangle;
 
 	/**
+	 * the leftRight
+	 */
+	public final Behavior leftRight;
+
+	/**
 	 * Constructor.
 	 * 
 	 * @param scriptEngine the Nashorn engine
@@ -48,7 +53,7 @@ public final class CoreModule {
 
 			position = new Behavior(new Applicator() {
 				@Override
-				public void apply(Behavior behavior, GameObject target, Object rawParameters) {
+				public void apply(GameObject target, Object rawParameters, Behavior behavior) {
 					PositionData data = new PositionData();
 					if (rawParameters != null) {
 						JSObject parameters = (JSObject)jdk.nashorn.api.scripting.ScriptUtils.wrap(rawParameters);
@@ -63,7 +68,6 @@ public final class CoreModule {
 					target.addListener(positionTransformListener);
 				}
 			});
-			// position = new Behavior(new ScriptedApplicator((JSObject)scriptEngine.eval("function(o) {o.set(this, {x: 0, y: 0}); }")));
 
 			final EventListener drawRectangleListener = new EventListener(null, "draw") {
 				@Override
@@ -80,8 +84,15 @@ public final class CoreModule {
 
 			rectangle = new Behavior(new Applicator() {
 				@Override
-				public void apply(Behavior behavior, GameObject target, Object parameters) {
+				public void apply(GameObject target, Object parameters, Behavior behavior) {
 					target.addListener(drawRectangleListener);
+				}
+			});
+
+			leftRight = new Behavior(new Applicator() {
+				@Override
+				public void apply(GameObject target, Object parameters, Behavior behavior) {
+					target.set(leftRight, "left");
 				}
 			});
 
@@ -89,7 +100,7 @@ public final class CoreModule {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	/**
 	 * Contains the per-object data for the position behavior.
 	 */

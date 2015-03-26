@@ -4,6 +4,8 @@
 
 package game.engine.game;
 
+import jdk.nashorn.api.scripting.JSObject;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Util;
@@ -48,7 +50,17 @@ public class Game {
 	 * @param applicator the applicator function
 	 * @return the behavior
 	 */
-	public Behavior newBehavior(Behavior.Applicator applicator) {
+	public Behavior newBehavior(JSObject applicatorFunction) {
+		return new Behavior(new Behavior.ScriptedApplicator(applicatorFunction));
+	}
+
+	/**
+	 * Creates a new behavior that uses the specified applicator function.
+	 * 
+	 * @param applicator the applicator function
+	 * @return the behavior
+	 */
+	public Behavior newBehaviorWithApplicator(Behavior.Applicator applicator) {
 		return new Behavior(applicator);
 	}
 

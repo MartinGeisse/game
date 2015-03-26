@@ -6,7 +6,7 @@ package game.core.movement;
 
 import game.core.AbstractBehavior;
 import game.core.GameObject;
-import game.core.geometry.LeftRight;
+import game.core.LeftRight;
 import game.core.geometry.MutablePosition;
 
 import org.lwjgl.input.Keyboard;

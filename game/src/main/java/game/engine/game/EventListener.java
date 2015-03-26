@@ -49,12 +49,12 @@ public abstract class EventListener {
 	/**
 	 * Handles an event.
 	 * 
-	 * @param gameObject thegame object that is emitting the event
 	 * @param behavior the event behavior
 	 * @param name the event name
+	 * @param gameObject the game object that is emitting the event
 	 * @param payload the payload
 	 */
-	public final void handleEvent(GameObject gameObject, Behavior behavior, String name, Object payload) {
+	public final void handleEvent(Behavior behavior, String name, GameObject gameObject, Object payload) {
 		if (behavior == this.behavior && name == this.name) {
 			handleEvent(gameObject, payload);
 		}

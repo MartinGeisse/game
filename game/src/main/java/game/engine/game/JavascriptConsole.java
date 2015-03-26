@@ -24,6 +24,17 @@ public class JavascriptConsole {
 	 * 
 	 */
 	private void dump(Object o, StringBuilder builder) {
+		
+		// handle known types
+		if (o == null) {
+			builder.append("null");
+			return;
+		} else if (o instanceof String) {
+			builder.append('"').append(o).append('"');
+			return;
+		}
+		
+		// try to wrap JS values and dump them, or fall back to toString()
 		o = jdk.nashorn.api.scripting.ScriptUtils.wrap(o);
 		if (o instanceof JSObject) {
 			JSObject object = (JSObject)o;
@@ -39,6 +50,8 @@ public class JavascriptConsole {
 					dump(element, builder);
 				}
 				builder.append("]");
+			} else if (object.isFunction()) {
+				builder.append("function");
 			} else {
 				builder.append('{');
 				boolean first = true;
@@ -54,11 +67,10 @@ public class JavascriptConsole {
 				}
 				builder.append("}");
 			}
-		} else if (o instanceof String) {
-			builder.append('"').append(o).append('"');
 		} else {
 			builder.append(o);
 		}
+		
 	}
 	
 }

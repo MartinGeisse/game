@@ -5,7 +5,7 @@
 package game.core.gfx;
 
 import game.core.GameObject;
-import game.core.geometry.LeftRight;
+import game.core.LeftRight;
 import game.core.movement.LeftRightOrientationBehavior;
 
 /**

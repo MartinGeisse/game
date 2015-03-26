@@ -5,7 +5,7 @@
 package game.core.movement;
 
 import game.core.AbstractBehavior;
-import game.core.geometry.LeftRight;
+import game.core.LeftRight;
 
 /**
  * This behavior is able to store a left/right orientation.
