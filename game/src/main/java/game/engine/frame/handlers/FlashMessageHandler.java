@@ -1,45 +1,33 @@
 /**
  * Copyright (c) 2010 Martin Geisse
- *
+ * <p>
  * This file is distributed under the terms of the MIT license.
  */
 
 package game.engine.frame.handlers;
 
-import static org.lwjgl.opengl.GL11.GL_BLEND;
-import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
-import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
-import static org.lwjgl.opengl.GL11.glBindTexture;
-import static org.lwjgl.opengl.GL11.glBlendFunc;
-import static org.lwjgl.opengl.GL11.glEnable;
-import static org.lwjgl.opengl.GL14.glWindowPos2i;
 import game.engine.frame.AbstractFrameHandler;
 import game.engine.frame.BreakFrameLoopException;
 import game.engine.gfx.Font;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.GL11;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import org.apache.log4j.Logger;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.GL11;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL14.glWindowPos2i;
 
 /**
  * Displays one or more messages for a certain time. Messages are rendered
  * using a {@link Font}. Each message will stay for the same configurable
  * time. Multiple messages will be stacked vertically if necessary.
- * 
+ *
  * Stacked messages will be drawn downwards, starting at a configurable
  * raster position. Subclasses might want to implement {@link #prepareOpenGlState()}
  * since there is no way to predict OpenGL state in a frame handler.
  */
 public class FlashMessageHandler extends AbstractFrameHandler {
 
-	/**
-	 * the logger
-	 */
-	private static Logger logger = Logger.getLogger(FlashMessageHandler.class);
-	
 	/**
 	 * the font
 	 */
@@ -168,7 +156,6 @@ public class FlashMessageHandler extends AbstractFrameHandler {
 	 * @param message the message to add
 	 */
 	public final void addMessage(final String message) {
-		logger.info("Flash message: " + message);
 		queue.add(new Entry(System.currentTimeMillis(), message));
 	}
 
@@ -205,7 +192,7 @@ public class FlashMessageHandler extends AbstractFrameHandler {
 			if (age < displayTime) {
 				brightness = 1.0f;
 			} else {
-				brightness = 1.0f - ((age - displayTime) / (float)fadeTime);
+				brightness = 1.0f - ((age - displayTime) / (float) fadeTime);
 			}
 			GL11.glPixelTransferf(GL11.GL_ALPHA_SCALE, brightness);
 			glWindowPos2i(leftOffset, height - topOffset - i * (2 * font.getCharacterHeight() + 4));

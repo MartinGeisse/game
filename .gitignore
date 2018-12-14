@@ -1,3 +1,5 @@
 /game/bin
 /game/.gradle
+/game/.idea
+/game/game.iml
 .DS_Store

@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2013 Martin Geisse
- *
+ * <p>
  * This file is distributed under the terms of the MIT license.
  */
 
@@ -10,8 +10,6 @@ import game.engine.resource.DefaultResouceLoader;
 import game.engine.resource.DefaultResourceManager;
 import game.engine.resource.Resources;
 import game.engine.system.LwjglNativeLibraryHelper;
-
-import org.apache.log4j.Logger;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -23,11 +21,6 @@ import org.lwjgl.opengl.PixelFormat;
  */
 public class Launcher {
 
-	/**
-	 * the logger
-	 */
-	private static Logger logger = Logger.getLogger(Launcher.class);
-	
 	/**
 	 * the screenWidth
 	 */
@@ -48,15 +41,13 @@ public class Launcher {
 	 * @param args command-line arguments
 	 */
 	public Launcher(String[] args) {
-		logger.trace("parsing command line options...");
 		for (final String arg : args) {
 			if (arg.equals("-fs")) {
 				fullscreen = true;
 			}
 		}
-		logger.trace("command line options parsed");
 	}
-	
+
 	/**
 	 * Getter method for the screenWidth.
 	 * @return the screenWidth
@@ -107,17 +98,15 @@ public class Launcher {
 
 	/**
 	 * Starts the game system.
-	 * 
+	 *
 	 * @throws Exception on errors during initialization
 	 */
 	public void startup() throws Exception {
-		logger.info("GameLauncher.launch() started");
 
 		// include LWJGL native libraries
 		LwjglNativeLibraryHelper.prepareNativeLibraries();
 
 		// configure the display
-		logger.trace("finding optimal display mode...");
 		DisplayMode bestMode = null;
 		int bestModeFrequency = -1;
 		for (DisplayMode mode : Display.getAvailableDisplayModes()) {
@@ -131,26 +120,19 @@ public class Launcher {
 		if (bestMode == null) {
 			bestMode = new DisplayMode(screenWidth, screenHeight);
 		}
-		logger.trace("setting intended display mode...");
 		Display.setDisplayMode(bestMode);
 		if (fullscreen) {
 			Display.setFullscreen(true);
 		}
-		logger.trace("switching display mode...");
 		Display.create(new PixelFormat(0, 24, 0));
-		logger.trace("display initialized");
 
 		// initialize the keyboard
-		logger.trace("initializing keyboard...");
 		Keyboard.create();
 		Keyboard.poll();
-		logger.trace("keyboard initialized");
-		
+
 		// initialize the mouse
-		logger.trace("initializing mouse...");
 		Mouse.create();
 		Mouse.poll();
-		logger.trace("mouse initialized");
 
 		// prepare loading images and sounds
 		Resources.setResourceManager(new DefaultResourceManager(new DefaultResouceLoader()));
@@ -165,5 +147,5 @@ public class Launcher {
 		Keyboard.destroy();
 		Display.destroy();
 	}
-	
+
 }
